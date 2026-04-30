@@ -1,0 +1,500 @@
+{
+  "E01": {
+    "title": "Python Introducción",
+    "module": "M01",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "Concatenar nombres", "max_points": 1,
+        "criteria": "Crea al menos 4 variables (nombres y apellidos) y las concatena en una frase usando el operador +",
+        "ideal_code": "nombre1 = \"Ana\"\nnombre2 = \"María\"\napellido1 = \"Pérez\"\napellido2 = \"González\"\nfrase = nombre1 + \" \" + nombre2 + \" \" + apellido1 + \" \" + apellido2\nprint(frase)",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "Lista de amigos", "max_points": 1,
+        "criteria": "Crea una lista con al menos 5 nombres de amigos, recorre con for e imprime cada uno",
+        "ideal_code": "amigos = [\"Ana\", \"Carlos\", \"María\", \"Diego\", \"Sofía\"]\nfor amigo in amigos:\n    print(amigo)",
+        "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "Lista de edades", "max_points": 1,
+        "criteria": "Crea una lista de edades (int), recorre con for e imprime cada una",
+        "ideal_code": "edades = [20, 22, 19, 25, 21]\nfor edad in edades:\n    print(edad)",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "Sumar números del RUT", "max_points": 1,
+        "criteria": "Crea una variable por cada dígito del RUT propio, los suma en variable total e imprime",
+        "ideal_code": "r1 = 1\nr2 = 2\nr3 = 3\n# ...\ntotal = r1 + r2 + r3\nprint(\"La suma de mi RUT es:\", total)",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "Evaluar cantidad de animalitos con if", "max_points": 2,
+        "criteria": "Usa if/elif/else para evaluar una variable numérica con al menos 3 condiciones distintas. Lógica coherente (ej: pocos/suficientes/muchos)",
+        "ideal_code": "animalitos = 3\nif animalitos < 2:\n    print(\"Tienes muy pocos\")\nelif animalitos <= 5:\n    print(\"Tienes suficientes\")\nelse:\n    print(\"Tienes muchos\")",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E02": {
+    "title": "Python Sumar Print",
+    "module": "M01",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "Variables para dibujar texto", "max_points": 1,
+        "criteria": "≥5 variables con líneas ASCII art coherentes del nombre o apellido",
+        "ideal_code": "a = \"***  ***\"\nb = \"* *  * *\"\nc = \"***  ***\"\nd = \"*    *\"\ne = \"*    *\"",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "Print para mostrar el dibujo", "max_points": 1,
+        "criteria": "Llama print() con cada variable creada en el ejercicio anterior, en el orden correcto",
+        "ideal_code": "print(a)\nprint(b)\nprint(c)\nprint(d)\nprint(e)",
+        "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "Sumar dígitos del RUT desde variables", "max_points": 1,
+        "criteria": "Una variable por dígito, suma acumulada en variable 'total', imprime resultado",
+        "ideal_code": "r01 = 1\nr02 = 2\nr03 = 3\ntotal = r01 + r02 + r03\nprint(\"La suma es:\", total)",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "Sumar dígitos del RUT desde lista", "max_points": 1,
+        "criteria": "Lista con los dígitos del RUT, ciclo for con acumulador que suma, imprime resultado",
+        "ideal_code": "rut = [1, 2, 3, 4, 5, 6, 7, 8]\ntot = 0\nfor i in range(len(rut)):\n    tot = tot + rut[i]\nprint(\"La suma es:\", tot)",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "Concatenar una frase", "max_points": 2,
+        "criteria": "Variables nom, rut con índice correcto, lista pref de 11 elementos, frase concatenada con str(), print correcto",
+        "ideal_code": "nom  = \"Juan\"\nrut  = 2  # último dígito\npref = [\"gráfico\", \"animación\", \"interactivo\", \"textil\", \"vestuario\",\n        \"música\", \"otro\", \"industrial\", \"digital\", \"experiencia\", \"editorial\"]\nfrase = \"Me llamo \" + nom + \", último número de rut \" + str(rut) + \", me gusta el diseño \" + pref[rut]\nprint(frase)",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "gráfico", "1": "animación", "2": "interactivo", "3": "textil",
+          "4": "vestuario", "5": "música", "6": "otro", "7": "industrial",
+          "8": "digital", "9": "experiencia", "10": "editorial"
+        },
+        "expected_template": "Me llamo {nombre}, último número de rut {rut_digit}, me gusta el diseño {selection}"
+      }
+    ]
+  },
+  "E03": {
+    "title": "Python Bit ASCII Formatear",
+    "module": "M01",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "Fecha de nacimiento en binario", "max_points": 1,
+        "criteria": "Variable día, mes, y año (1 o 2 variables para año > 255) en notación 0b, imprime con labels",
+        "ideal_code": "d  = 0b00100001  # día\nm  = 0b00001101  # mes\na1 = 0b01111011  # parte alta del año\na2 = 0b11101001  # parte baja\nprint(\"Día:\", d, \"Mes:\", m, \"Año:\", a1 + a2)",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "Caracter a ASCII", "max_points": 1,
+        "criteria": "Una variable por letra del nombre/apellido usando ord(), imprime todos en un solo print",
+        "ideal_code": "a = ord(\"a\")\nb = ord(\"n\")\nc = ord(\"a\")\nprint(a, b, c)",
+        "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "ASCII a caracter", "max_points": 1,
+        "criteria": "Selecciona la fila correcta según su dígito de RUT, decodifica cada número con chr(), imprime la palabra",
+        "ideal_code": "# Para RUT terminado en K → trabajar\nx1 = chr(116)\nx2 = chr(114)\nx3 = chr(97)\nx4 = chr(98)\nx5 = chr(97)\nx6 = chr(106)\nx7 = chr(97)\nx8 = chr(114)\nprint(x1+x2+x3+x4+x5+x6+x7+x8)",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "ambiente", "1": "derechos", "2": "etiqueta", "3": "gobierno",
+          "4": "historia", "5": "millones", "6": "nacional", "7": "programa",
+          "8": "recuerda", "9": "silencio", "10": "trabajar"
+        },
+        "expected_template": "Palabra esperada: {selection}"
+      },
+      {
+        "n": 4, "title": "Concatenar frase", "max_points": 1,
+        "criteria": "Variables K (edad) y N (año nacimiento) definidas, S = K + N, frase concatenada con str(), print correcto",
+        "ideal_code": "K = 21\nN = 2003\nS = K + N\nprint(\"Al sumar\", K, \"y\", N, \"el resultado es\", S)",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "Texto multilínea", "max_points": 1,
+        "criteria": "Nombre completo con triple comillas, mínimo 8 líneas, incluye comentario personal, formato escalonado",
+        "ideal_code": "texto = \"\"\"\nAna\n    María\n        Pérez\n            González\n                Diseñadora\n                    UC\n                        Santiago\n                            Chile\"\"\"\nprint(texto)",
+        "rut_indexed": false
+      },
+      {
+        "n": 6, "title": "Dividir frase con saltos de línea", "max_points": 1,
+        "criteria": "Línea de La Araucana guardada en variable usando \\n para separar cada palabra, imprime con print",
+        "ideal_code": "linea = \"No \\nlas \\ndamas, \\namor, \\nno \\ngentilezas\"\nprint(linea)",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E04": {
+    "title": "Python Control Flujo",
+    "module": "M01",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "Variables y tipos de datos", "max_points": 1,
+        "criteria": "Crea ≥4 variables de tipos distintos (int, float, str, bool), imprime cada una con type()",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "If-else", "max_points": 1,
+        "criteria": "if/elif/else con al menos 3 ramas, lógica coherente, imprime resultado en cada rama",
+        "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "Ciclos For — completar lista", "max_points": 1,
+        "criteria": "Lista de al menos 5 elementos, ciclo for que recorre e imprime cada elemento",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "Listas — rescatar palabras", "max_points": 1,
+        "criteria": "Accede a elementos de listas existentes por índice y los guarda en nuevas variables",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "Listas — completar frase", "max_points": 1,
+        "criteria": "Construye una frase concatenando elementos extraídos de listas del ejercicio, resultado coherente",
+        "rut_indexed": false
+      },
+      {
+        "n": 6, "title": "Integrar — algoritmo completo", "max_points": 1,
+        "criteria": "Combina variables, lista, ciclo for y if/else en un algoritmo coherente que produzca output significativo",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E05": {
+    "title": "Python Forma Color",
+    "module": "M01",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "Completar listas de profesiones y sueldos", "max_points": 1,
+        "criteria": "Listas de professions (str) y sueldos (int/float) con mínimo 5 elementos cada una, misma longitud",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "Mini gráfico Matplotlib — profesiones y sueldos", "max_points": 1,
+        "criteria": "plt.bar() o plt.barh() con las listas del ejercicio anterior, plt.show(), sin errores",
+        "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "Color — degradado de 10 pasos", "max_points": 1,
+        "criteria": "Lista de 10 colores RGB interpolados entre 2 colores extremos, visualizado con matplotlib",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "Color — bandera horizontal", "max_points": 1,
+        "criteria": "Dibuja la bandera correcta según su dígito de RUT con franjas horizontales en colores correctos",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "Alemania (negro, rojo, dorado)",
+          "1": "Armenia (rojo, azul, naranja)",
+          "2": "Bolivia (rojo, amarillo, verde)",
+          "3": "Estonia (azul, negro, blanco)",
+          "4": "Gabón (verde, amarillo, azul)",
+          "5": "Holanda (rojo, blanco, azul)",
+          "6": "Hungría (rojo, blanco, verde)",
+          "7": "Lituania (amarillo, verde, rojo)",
+          "8": "Luxemburgo (rojo, blanco, azul claro)",
+          "9": "Rusia (blanco, azul, rojo)",
+          "10": "Sierra Leona (verde, blanco, azul)"
+        },
+        "expected_template": "Bandera horizontal esperada: {selection}"
+      },
+      {
+        "n": 5, "title": "Color — bandera vertical", "max_points": 1,
+        "criteria": "Dibuja la bandera correcta según su dígito de RUT con franjas verticales en colores correctos",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "Camerún (verde, rojo, amarillo)",
+          "1": "Bélgica (negro, amarillo, rojo)",
+          "2": "Rumania (azul, amarillo, rojo)",
+          "3": "Francia (azul, blanco, rojo)",
+          "4": "Irlanda (verde, blanco, naranja)",
+          "5": "Italia (verde, blanco, rojo)",
+          "6": "Guinea (rojo, amarillo, verde)",
+          "7": "Mali (verde, amarillo, rojo)",
+          "8": "Costa de Marfil (naranja, blanco, verde)",
+          "9": "Bélgica (negro, amarillo, rojo)",
+          "10": "Guinea (rojo, amarillo, verde)"
+        },
+        "expected_template": "Bandera vertical esperada: {selection}"
+      },
+      {
+        "n": 6, "title": "Formas y Texto — ordenar por tamaño y color", "max_points": 1,
+        "criteria": "Muestra texto con matplotlib con al menos 3 tamaños distintos y 3 colores distintos, ordenados coherentemente",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E06": {
+    "title": "Python Texto Strings",
+    "module": "M02",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "Casting — sumar dígitos del RUT", "max_points": 1,
+        "criteria": "RUT como string, extrae cada dígito, convierte a int con int(), suma y muestra total",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "Seleccionar desde listas", "max_points": 1,
+        "criteria": "Selecciona paises[n] y animales[n] donde n es su último dígito de RUT, imprime ambos",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "Albania + oso polar", "1": "Bélgica + delfín",
+          "2": "Chipre + elefante", "3": "Dinamarca + flamenco",
+          "4": "Egipto + gorila", "5": "Finlandia + hipopótamo",
+          "6": "Grecia + iguana", "7": "Hungría + jaguar",
+          "8": "Islandia + koala", "9": "Jamaica + lemur",
+          "10": "Senegal + manatí"
+        },
+        "expected_template": "País: {selection} (según paises[{rut_digit}] y animales[{rut_digit}])"
+      },
+      {
+        "n": 3, "title": "Reconstruir palabra usando indexación", "max_points": 1,
+        "criteria": "Accede a caracteres de un string por índice y construye una nueva palabra distinta concatenando",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "Reemplazar texto", "max_points": 1,
+        "criteria": "Usa .replace() para cambiar al menos 2 palabras en un string, imprime resultado",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "Separar elementos de una lista", "max_points": 1,
+        "criteria": "Usa .split() sobre un string con separador explícito, resultado es una lista, imprime",
+        "rut_indexed": false
+      },
+      {
+        "n": 6, "title": "Dar vuelta una palabra", "max_points": 1,
+        "criteria": "Invierte un string usando slicing [::-1], imprime el resultado",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E07": {
+    "title": "Python Texto Análisis",
+    "module": "M02",
+    "total_points": 0,
+    "questions": [
+      {
+        "n": 1, "title": "A - Importar librerías", "max_points": 0,
+        "criteria": "Importa pandas, requests, re, stopwords (nltk o similar)",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "B - Cargar datos del texto", "max_points": 0,
+        "criteria": "Carga el artículo correcto según su dígito de RUT desde la API C80",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "Artículo 20 (Art. 20 C80)",
+          "1": "Artículo 21 (Art. 21 C80)",
+          "2": "Artículo 22 (Art. 22 C80)",
+          "3": "Artículo 23 (Art. 23 C80)",
+          "4": "Artículo 24 (Art. 24 C80)",
+          "5": "Artículo 25 (Art. 25 C80)",
+          "6": "Artículo 26 (Art. 26 C80)",
+          "7": "Artículo 27 (Art. 27 C80)",
+          "8": "Artículo 28 (Art. 28 C80)",
+          "9": "Artículo 29 (Art. 29 C80)",
+          "10": "Artículo 30 (Art. 30 C80)"
+        },
+        "expected_template": "URL esperada: https://c80.cl/wp-json/constitucion1980/v1/articulo/{selection_num}"
+      },
+      {
+        "n": 3, "title": "C - Explorar datos", "max_points": 0,
+        "criteria": "Muestra shape, head, columns del DataFrame cargado",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "D - Separar palabras", "max_points": 0,
+        "criteria": "Tokeniza el texto en lista de palabras (bolsa de palabras)",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "E - Remover palabras sin interés", "max_points": 0,
+        "criteria": "Filtra stopwords en español de la lista de tokens",
+        "rut_indexed": false
+      },
+      {
+        "n": 6, "title": "F - Contar frecuencia", "max_points": 0,
+        "criteria": "Cuenta frecuencia de cada token con Counter o similar",
+        "rut_indexed": false
+      },
+      {
+        "n": 7, "title": "G - Graficar resultados", "max_points": 0,
+        "criteria": "plt.barh() con las N palabras más frecuentes, legible",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E08": {
+    "title": "Python Imagen",
+    "module": "M02",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "Imagen como matriz", "max_points": 1,
+        "criteria": "Crea matriz 12×12 con np.random.randint(10, 200, size=(12,12)), visualiza con imshow",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "Importar imagen", "max_points": 1,
+        "criteria": "Importa una imagen de animalitos (carpeta img_animales), guarda en variable mi_imagen",
+        "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "Operaciones con imagen", "max_points": 1,
+        "criteria": "Recorta mi_imagen dejando solo la cabeza del animal, visualiza con imshow",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "Valores de píxeles", "max_points": 1,
+        "criteria": "Muestra la misma imagen con al menos 2 colormaps diferentes usando imshow",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "Dibujar píxeles", "max_points": 1,
+        "criteria": "Dibuja un triángulo equilátero sobre la imagen usando líneas de la lista disponible",
+        "rut_indexed": false
+      },
+      {
+        "n": 6, "title": "Histograma de distribución de color", "max_points": 1,
+        "criteria": "Separa los 3 canales RGB de mi_imagen, grafica histograma de distribución de valores",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E09": {
+    "title": "Python Audio",
+    "module": "M02",
+    "total_points": 1,
+    "questions": [
+      {
+        "n": 1, "title": "Audio — ondas sintéticas", "max_points": 1,
+        "criteria": "Genera y reproduce al menos 2 tipos de onda (sine, square, sawtooth, etc.) con variables definidas",
+        "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "Audio — cargar 5 samples", "max_points": 0,
+        "criteria": "Carga 5 samples desde la carpeta snd usando librería wave o similar, reproduce con Audio()",
+        "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "Audio — graficar ondas", "max_points": 0,
+        "criteria": "Grafica la forma de onda de al menos 3 samples distintos usando plt",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E10": {
+    "title": "Python Estadística Descriptiva",
+    "module": "M02",
+    "total_points": 1,
+    "questions": [
+      {
+        "n": 1, "title": "0 - Importar librerías", "max_points": 0, "criteria": "pandas, numpy, matplotlib importados", "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "1 - Cargar datos y exploración inicial", "max_points": 0, "criteria": "Lee CSV propio con pd.read_csv(), muestra shape, head, describe", "rut_indexed": false
+      },
+      {
+        "n": 3, "title": "2 - Medidas de tendencia central", "max_points": 0, "criteria": "Calcula mean, median, mode de al menos una columna numérica", "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "3 - Medidas de dispersión", "max_points": 0, "criteria": "Calcula std, var, max, min de al menos una columna", "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "4 - Graficar barras", "max_points": 1, "criteria": "plt.bar() con una columna categórica y una numérica del dataset propio, legible", "rut_indexed": false
+      },
+      {
+        "n": 6, "title": "5 - Graficar scatterplot/torta", "max_points": 0, "criteria": "plt.scatter() o plt.pie() con el dataset propio", "rut_indexed": false
+      },
+      {
+        "n": 7, "title": "6 - Mejorar gráfica", "max_points": 0, "criteria": "Mejora el scatterplot con colores, etiquetas u otros parámetros", "rut_indexed": false
+      }
+    ]
+  },
+  "E11": {
+    "title": "Python Formatos Limpiar",
+    "module": "M03",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "0 - Importar librerías", "max_points": 0, "criteria": "pandas y matplotlib importados", "rut_indexed": false
+      },
+      {
+        "n": 2, "title": "A - Cargar datos", "max_points": 0.5,
+        "criteria": "Carga el CSV correcto según su dígito de RUT con pd.read_csv(), muestra shape y head",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "ci0_discos.csv", "1": "ci1_transporte.csv", "2": "ci2_sueldos.csv",
+          "3": "ci3_peliculas.csv", "4": "ci4_futbolistas.csv", "5": "ci5_instrumentos.csv",
+          "6": "ci6_regalos.csv", "7": "ci7_frutas.csv", "8": "ci8_libros.csv",
+          "9": "ci9_viajes.csv", "10": "ci9_viajes.csv"
+        },
+        "expected_template": "Dataset esperado: {selection}"
+      },
+      {
+        "n": 3, "title": "B - Explorar datos", "max_points": 0.5,
+        "criteria": "shape, info(), columns, head(), tail(), describe() del dataset propio",
+        "rut_indexed": false
+      },
+      {
+        "n": 4, "title": "C - Limpieza de datos", "max_points": 2,
+        "criteria": "Identifica y corrige ≥3 problemas: NaN, valores mal escritos, fechas, tipos incorrectos usando dropna, fillna, replace, to_datetime",
+        "rut_indexed": false
+      },
+      {
+        "n": 5, "title": "D - Datos derivados", "max_points": 1,
+        "criteria": "Crea al menos 1 columna nueva derivada de columnas existentes (ej: suma, resta, concatenación)",
+        "rut_indexed": false
+      },
+      {
+        "n": 6, "title": "E - Persistencia de datos", "max_points": 1,
+        "criteria": "Guarda el DataFrame limpio en un nuevo CSV con df.to_csv()",
+        "rut_indexed": false
+      },
+      {
+        "n": 7, "title": "F - Visualización", "max_points": 1,
+        "criteria": "plt.bar() y plt.scatter() con columnas del dataset limpio, ambos con title y labels",
+        "rut_indexed": false
+      }
+    ]
+  },
+  "E12": {
+    "title": "Python Analizar Visualizar",
+    "module": "M03",
+    "total_points": 6,
+    "questions": [
+      {
+        "n": 1, "title": "F1 - Wordcloud Wikipedia", "max_points": 3,
+        "criteria": "Genera wordcloud del artículo Wikipedia correcto según RUT, visualizado correctamente",
+        "rut_indexed": true,
+        "rut_map": {
+          "0": "Algoritmo colonia de hormigas",
+          "1": "Synco (proyecto)",
+          "2": "Cuarteto de Anscombe",
+          "3": "Python (lenguaje)",
+          "4": "Protobionte",
+          "5": "Richard Stallman",
+          "6": "Linus Torvalds",
+          "7": "IRT (electrodomésticos)",
+          "8": "Antu (televisor)",
+          "9": "Fortran",
+          "10": "Autopoiesis"
+        },
+        "expected_template": "Artículo Wikipedia esperado: {selection}"
+      },
+      {
+        "n": 2, "title": "F2 - Wordcloud Wikipedia segundo", "max_points": 3,
+        "criteria": "Genera un segundo wordcloud de un artículo distinto a elección, bien visualizado",
+        "rut_indexed": false
+      }
+    ]
+  }
+}
