@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import type { RubricQuestion, QuestionGrade, ParsedQuestion, CellOutput } from '@/types/database'
+import type { RubricQuestion, QuestionGrade, ParsedQuestion } from '@/types/database'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
+import CellOutputView from './CellOutputView'
 
 interface Props {
   rubricQuestion: RubricQuestion
@@ -14,10 +15,11 @@ interface Props {
   onComment: (comment: string) => void
   onUpdateCriteria?: (n: number, criteria: string) => Promise<void>
   readOnly?: boolean
+  compact?: boolean
 }
 
 export default function AnswerCard({
-  rubricQuestion, parsedQuestion, grade, expectedOutput, onScore, onComment, onUpdateCriteria, readOnly
+  rubricQuestion, parsedQuestion, grade, expectedOutput, onScore, onComment, onUpdateCriteria, readOnly, compact
 }: Props) {
   const [showIdeal, setShowIdeal] = useState(false)
   const [comment, setComment] = useState(grade?.comment ?? '')
@@ -75,9 +77,9 @@ export default function AnswerCard({
         </div>
       </div>
 
-      {/* Content: two-column */}
-      <div className="grid grid-cols-2 divide-x">
-        {/* Left: student code */}
+      {/* Content: full two-column, or pauta-only in compact mode (notebook shown separately) */}
+      <div className={compact ? 'p-3' : 'grid grid-cols-2 divide-x'}>
+        {!compact && (
         <div className="p-3">
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">Respuesta alumno</p>
           {parsedQuestion?.cells?.length ? (
@@ -103,12 +105,11 @@ export default function AnswerCard({
             </div>
           )}
         </div>
+        )}
 
-        {/* Right: pauta */}
-        <div className="p-3">
+        <div className={compact ? '' : 'p-3'}>
           <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">Pauta</p>
           <div className="space-y-3">
-            {/* Criteria - click to edit */}
             {editingCriteria ? (
               <textarea
                 autoFocus
@@ -116,7 +117,7 @@ export default function AnswerCard({
                 onChange={e => setCriteriaText(e.target.value)}
                 onBlur={saveCriteria}
                 onKeyDown={e => { if (e.key === 'Escape') { setCriteriaText(rubricQuestion.criteria); setEditingCriteria(false) } }}
-                rows={3}
+                rows={compact ? 2 : 3}
                 className="w-full text-sm text-gray-700 border border-blue-300 rounded px-2 py-1 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
             ) : (
@@ -130,7 +131,6 @@ export default function AnswerCard({
               </p>
             )}
 
-            {/* Expected output for RUT-indexed */}
             {expectedOutput && (
               <div className="bg-blue-50 border border-blue-200 rounded p-2">
                 <p className="text-xs font-medium text-blue-600 mb-1">Output esperado (RUT)</p>
@@ -138,7 +138,6 @@ export default function AnswerCard({
               </div>
             )}
 
-            {/* Ideal code (collapsible) */}
             {rubricQuestion.ideal_code && (
               <div>
                 <button
@@ -173,30 +172,4 @@ export default function AnswerCard({
       )}
     </div>
   )
-}
-
-function CellOutputView({ output }: { output: CellOutput }) {
-  if (output.kind === 'image' && output.image) {
-    return (
-      <div className="border border-gray-200 rounded overflow-hidden bg-white">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`data:image/png;base64,${output.image}`} alt="output" className="max-w-full" />
-      </div>
-    )
-  }
-  if (output.kind === 'error') {
-    return (
-      <pre className="text-xs font-mono bg-red-50 text-red-700 rounded px-3 py-2 whitespace-pre-wrap border border-red-200">
-        {output.text}
-      </pre>
-    )
-  }
-  if (output.kind === 'text' && output.text) {
-    return (
-      <pre className="text-xs font-mono bg-white text-gray-800 rounded px-3 py-2 whitespace-pre-wrap border border-gray-200">
-        {output.text}
-      </pre>
-    )
-  }
-  return null
 }

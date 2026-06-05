@@ -43,6 +43,7 @@ export default async function DashboardPage() {
             <Link href="/asignaciones"><Button variant="outline" size="sm">Asignaciones</Button></Link>
             <Link href="/pauta"><Button variant="outline" size="sm">Pautas</Button></Link>
             <Link href="/resultados"><Button variant="outline" size="sm">Resultados</Button></Link>
+            <Link href="/notas"><Button variant="outline" size="sm">Notas curso</Button></Link>
             <Link href="/usuarios"><Button variant="outline" size="sm">Usuarios</Button></Link>
           </div>
           <form action="/api/auth/logout" method="POST">
