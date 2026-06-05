@@ -3,14 +3,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import type { SubmissionWithGrades, Exercise, QuestionGrade, RubricQuestion } from '@/types/database'
 import { createClient } from '@/lib/supabase/client'
-import { resolveExpectedOutput } from '@/lib/rut-helpers'
 import StudentSidebar from './StudentSidebar'
-import AnswerCard from './AnswerCard'
+import GradingPanel from './GradingPanel'
+import NotebookFullView from './NotebookFullView'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Textarea } from '@/components/ui/textarea'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
+const SYNCABLE_EXERCISES = new Set(
+  Array.from({ length: 13 }, (_, i) => `E${String(i + 1).padStart(2, '0')}`)
+)
 
 interface Props {
   submissions: SubmissionWithGrades[]
@@ -31,7 +34,12 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
   const [generalComments, setGeneralComments] = useState<Record<string, string>>(
     Object.fromEntries(submissions.map(s => [s.id, s.general_comment ?? '']))
   )
+  const [notaSyncedMap, setNotaSyncedMap] = useState<Record<string, string | null>>(
+    Object.fromEntries(submissions.map(s => [s.id, s.nota_synced_at ?? null]))
+  )
   const [saving, setSaving] = useState(false)
+  const [syncingNota, setSyncingNota] = useState(false)
+  const [syncNotaMessage, setSyncNotaMessage] = useState<string | null>(null)
   const [fullView, setFullView] = useState(false)
   const [rubricQuestions, setRubricQuestions] = useState<RubricQuestion[]>(exercise.rubrica?.questions ?? [])
   const mainRef = useRef<HTMLDivElement>(null)
@@ -52,12 +60,14 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
   const grades = gradesMap[currentId] ?? []
   const isEditable = currentSub?.assigned_to === userId
 
-  // Scroll to top when switching students
   useEffect(() => {
     mainRef.current?.scrollTo({ top: 0 })
   }, [currentId])
 
-  // Keyboard navigation
+  useEffect(() => {
+    setSyncNotaMessage(null)
+  }, [currentId])
+
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
@@ -74,6 +84,8 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
 
   const totalScore = grades.reduce((sum, g) => sum + (g.score ?? 0), 0)
   const maxTotal = rubricQuestions.reduce((sum, q) => sum + q.max_points, 0)
+  const hasAnyGrade = grades.some(g => g.score != null) || totalScore > 0
+  const canSyncNota = isEditable && hasAnyGrade && SYNCABLE_EXERCISES.has(exercise.id)
 
   const upsertGrade = useCallback(async (
     questionN: number,
@@ -155,8 +167,58 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
     await supabase.from('submissions').update({ general_comment: comment }).eq('id', currentId)
   }, [currentId, supabase])
 
+  const syncNota = useCallback(async () => {
+    setSyncingNota(true)
+    setSyncNotaMessage(null)
+    try {
+      const res = await fetch('/api/notas/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ submission_id: currentId }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setSyncNotaMessage(`Error: ${data.error ?? 'No se pudo enviar la nota'}`)
+      } else {
+        const syncedAt = data.nota_synced_at ?? new Date().toISOString()
+        setNotaSyncedMap(prev => ({ ...prev, [currentId]: syncedAt }))
+        setSyncNotaMessage(`Nota ${data.nota} enviada al Excel para ${exercise.id}`)
+      }
+    } catch {
+      setSyncNotaMessage('Error: falló la conexión con el servidor')
+    }
+    setSyncingNota(false)
+  }, [currentId, exercise.id])
+
   const emptyCount = currentSub?.notebook_json?.questions?.filter(q => q.is_empty).length ?? 0
   const isDone = submissions.find(s => s.id === currentId)?.status === 'done'
+
+  const gradingPanelProps = {
+    currentSub,
+    rubricQuestions,
+    grades,
+    totalScore,
+    maxTotal,
+    isEditable,
+    isDone: !!isDone,
+    currentIdx,
+    submissionsLength: submissions.length,
+    generalComment: generalComments[currentId] ?? '',
+    notaSyncedAt: notaSyncedMap[currentId] ?? null,
+    syncingNota,
+    syncNotaMessage,
+    canSyncNota,
+    onScore: upsertGrade,
+    onComment: upsertComment,
+    onUpdateCriteria: updateCriteria,
+    onGeneralCommentChange: (comment: string) => setGeneralComments(prev => ({ ...prev, [currentId]: comment })),
+    onGeneralCommentBlur: saveGeneralComment,
+    onMarkDone: markDone,
+    onUnmarkDone: unmarkDone,
+    onSyncNota: syncNota,
+    onPrev: () => setCurrentId(submissions[currentIdx - 1].id),
+    onNext: () => setCurrentId(submissions[currentIdx + 1].id),
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 font-sans">
@@ -170,7 +232,6 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
       />
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top nav */}
         <div className="bg-white border-b px-6 py-3 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <Link href="/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>
@@ -196,7 +257,6 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
           </div>
         </div>
 
-        {/* Navigation bar */}
         <div className="bg-white border-b px-6 py-2 flex items-center justify-between shrink-0">
           <Button
             variant="ghost" size="sm"
@@ -205,14 +265,20 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
           >
             ← Anterior
           </Button>
-          <div className="flex items-center gap-3">
-            <span className="font-medium">
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="font-medium shrink-0">
               {currentSub.student_apellido}, {currentSub.student_nombre}
             </span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 shrink-0">
               {currentSub.student_rut.toUpperCase()} · RUT termina en <strong>{currentSub.rut_last_digit}</strong>
             </span>
-            <span className="text-xs text-gray-400">({currentIdx + 1}/{submissions.length})</span>
+            <span
+              className="text-xs text-gray-400 font-mono truncate max-w-xs"
+              title={currentSub.filename}
+            >
+              {currentSub.filename}
+            </span>
+            <span className="text-xs text-gray-400 shrink-0">({currentIdx + 1}/{submissions.length})</span>
             {emptyCount > 0 && (
               <Badge variant="destructive" className="text-xs">⚠ {emptyCount} sin respuesta</Badge>
             )}
@@ -230,97 +296,18 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
           </Button>
         </div>
 
-        {/* Scrollable content */}
-        <div ref={mainRef} className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+        <div ref={mainRef} className="flex-1 overflow-y-auto px-6 py-4">
           {fullView ? (
-            <div className="max-w-3xl mx-auto space-y-2">
-              {(currentSub.notebook_json?.raw_cells ?? []).map((cell, i) => (
-                <div key={i} className={`rounded border ${cell.type === 'code' ? 'bg-gray-900 text-gray-100' : 'bg-white'} p-3`}>
-                  {cell.type === 'code' ? (
-                    <pre className="text-xs font-mono whitespace-pre-wrap">{cell.source}</pre>
-                  ) : (
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{cell.source}</p>
-                  )}
-                </div>
-              ))}
+            <div className="flex gap-4 h-full min-h-0">
+              <div className="flex-1 overflow-y-auto min-w-0">
+                <NotebookFullView cells={currentSub.notebook_json?.raw_cells ?? []} />
+              </div>
+              <div className="w-[420px] shrink-0 overflow-y-auto border-l pl-4">
+                <GradingPanel {...gradingPanelProps} compact />
+              </div>
             </div>
           ) : (
-            <>
-              {rubricQuestions.map(rubQ => {
-                const parsedQ = currentSub.notebook_json?.questions?.find(q => q.n === rubQ.n)
-                  ?? currentSub.notebook_json?.questions?.[rubQ.n - 1]
-                const grade = grades.find(g => g.question_n === rubQ.n)
-                const expected = resolveExpectedOutput(rubQ, currentSub.rut_last_digit, currentSub.student_nombre)
-
-                return (
-                  <AnswerCard
-                    key={rubQ.n}
-                    rubricQuestion={rubQ}
-                    parsedQuestion={parsedQ ?? null}
-                    grade={grade ?? null}
-                    expectedOutput={expected}
-                    onScore={(score) => upsertGrade(rubQ.n, score)}
-                    onComment={(comment) => upsertComment(rubQ.n, comment)}
-                    onUpdateCriteria={updateCriteria}
-                    readOnly={!isEditable}
-                  />
-                )
-              })}
-
-              {/* Total + general comment + mark done */}
-              <div className={`bg-white rounded-lg border p-4 space-y-3 ${!isEditable ? 'opacity-60' : ''}`}>
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg">Total: {totalScore}/{maxTotal}</span>
-                  <div className="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-blue-500 rounded-full"
-                      style={{ width: `${maxTotal > 0 ? (totalScore / maxTotal) * 100 : 0}%` }}
-                    />
-                  </div>
-                </div>
-                {isEditable && (
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 block mb-1">Comentario general</label>
-                    <Textarea
-                      placeholder="Comentario general sobre el trabajo del alumno…"
-                      value={generalComments[currentId] ?? ''}
-                      onChange={e => setGeneralComments(prev => ({ ...prev, [currentId]: e.target.value }))}
-                      onBlur={e => saveGeneralComment(e.target.value)}
-                      rows={2}
-                    />
-                  </div>
-                )}
-                <div className="flex items-center justify-between pt-2">
-                  <Button
-                    variant="ghost" size="sm"
-                    disabled={currentIdx === 0}
-                    onClick={() => setCurrentId(submissions[currentIdx - 1].id)}
-                  >
-                    ← Anterior
-                  </Button>
-                  {isEditable && (
-                    <div className="flex gap-2">
-                      {isDone ? (
-                        <Button variant="outline" size="sm" onClick={unmarkDone} className="text-gray-600">
-                          Quitar revisado
-                        </Button>
-                      ) : (
-                        <Button onClick={markDone} className="bg-green-600 hover:bg-green-700">
-                          ✓ Marcar como revisado
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                  <Button
-                    variant="ghost" size="sm"
-                    disabled={currentIdx === submissions.length - 1}
-                    onClick={() => setCurrentId(submissions[currentIdx + 1].id)}
-                  >
-                    Siguiente →
-                  </Button>
-                </div>
-              </div>
-            </>
+            <GradingPanel {...gradingPanelProps} />
           )}
         </div>
       </div>

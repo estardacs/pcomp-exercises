@@ -82,6 +82,7 @@ export interface Submission {
   total_score: number | null
   general_comment: string | null
   graded_at: string | null
+  nota_synced_at: string | null
 }
 
 export interface QuestionGrade {
