@@ -94,7 +94,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col h-full px-14 py-11">
 
           {/* Texto principal */}
-          <div className="flex-1 flex flex-col justify-center gap-9 max-w-[500px]">
+          <div className="flex-1 flex flex-col justify-start pt-16 gap-9 max-w-[500px]">
             <div>
               <div
                 className="login-drift text-blue-300/60 text-[11px] font-mono tracking-[0.3em] mb-5 uppercase"
@@ -148,7 +148,7 @@ export default function LoginPage() {
               </div>
 
               {/* Líneas de código con stagger */}
-              <div className="px-5 py-4 font-mono text-[12.5px] leading-[1.85]">
+              <div className="px-6 py-6 font-mono text-[14px] leading-[1.9]">
                 {CODE.map((line, i) => (
                   <div
                     key={i}
@@ -197,14 +197,6 @@ export default function LoginPage() {
 
         {/* Contenido del login — sin card, usa todo el ancho disponible */}
         <div className="w-full max-w-[440px] login-drift" style={{ animationDelay: '0.25s' }}>
-
-          {/* Icono UC */}
-          <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center mb-8"
-            style={{ background: 'linear-gradient(135deg, #1B4B8A 0%, #2563EB 100%)' }}
-          >
-            <span className="text-white font-bold tracking-wider">UC</span>
-          </div>
 
           {/* Metadata del ramo */}
           <p className="text-[11px] font-mono text-gray-400 tracking-wider uppercase mb-3">
