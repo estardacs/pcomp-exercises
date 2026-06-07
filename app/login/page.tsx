@@ -29,7 +29,7 @@ const CODE: Tok[][] = [
   [['tx', 'ramo     '], ['tx', '= '], ['st', '"Pensamiento Computacional"']],
   [['tx', 'codigo   '], ['tx', '= '], ['st', '"DNO1063"']],
   [['tx', 'semestre '], ['tx', '= '], ['st', '"2026-A"']],
-  [['tx', 'facultad '], ['tx', '= '], ['st', '"Diseño · PUC"']],
+  [['tx', 'facultad '], ['tx', '= '], ['st', '"Diseño · UC"']],
   [['tx', '']],
   [['fn', 'print'], ['tx', '('], ['st', '"Ramo:"'],     ['tx', ', ramo)']],
   [['fn', 'print'], ['tx', '('], ['st', '"Codigo:"'],   ['tx', ', codigo)']],
@@ -208,7 +208,7 @@ export default function LoginPage() {
 
           {/* Metadata del ramo */}
           <p className="text-[11px] font-mono text-gray-400 tracking-wider uppercase mb-3">
-            DNO1063 · 2026-A · Diseño · PUC
+            DNO1063 · 2026-A · Diseño · UC
           </p>
 
           <h2 className="text-[1.75rem] font-bold text-gray-900 leading-tight mb-2">
