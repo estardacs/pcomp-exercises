@@ -45,7 +45,13 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/login?error=cas_no_user`)
   }
 
-  const email = `${casUsername.toLowerCase()}@uc.cl`
+  const username = casUsername.toLowerCase()
+
+  // UC uses @uc.cl for older cohorts and @estudiante.uc.cl for newer ones.
+  // Look up which domain this user is registered under; default to @uc.cl for new users.
+  const admin = createServiceClient()
+  const { data: existingEmail } = await admin.rpc('find_uc_email', { p_username: username })
+  const email = (existingEmail as string | null) ?? `${username}@uc.cl`
 
   // Extract optional attributes UC CAS may return.
   const displayName =
@@ -58,7 +64,6 @@ export async function GET(request: NextRequest) {
 
   // 2. Generate a Supabase magic-link. This upserts the auth user (creates if
   //    new, finds if existing) and returns a one-time link we redirect to.
-  const admin = createServiceClient()
   const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
     type: 'magiclink',
     email,
