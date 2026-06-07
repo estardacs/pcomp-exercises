@@ -5,6 +5,7 @@ import { parseFilename } from '@/lib/filename-parser'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 
 interface FileRow {
   file: File
@@ -53,7 +54,7 @@ export default function SubirPage() {
   const invalid = rows.filter(r => !r.parsed)
 
   return (
-    <main className="max-w-4xl mx-auto px-6 py-8 space-y-6 animate-in fade-in-0 duration-200">
+    <main className="px-8 py-8 space-y-6 animate-in fade-in-0 duration-200">
         <h1 className="text-xl font-semibold">Subir notebooks</h1>
 
         {/* Drop zone */}
@@ -138,7 +139,7 @@ export default function SubirPage() {
               </div>
             )}
             <Link href="/asignaciones">
-              <Button size="sm" className="mt-2">Ir a asignaciones →</Button>
+              <Button size="sm" className="mt-2 gap-1.5">Ir a asignaciones <ChevronRight className="w-3.5 h-3.5" /></Button>
             </Link>
           </div>
         )}

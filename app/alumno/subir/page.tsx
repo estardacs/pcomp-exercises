@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { requireStudentPage } from '@/lib/auth'
+import { ChevronLeft } from 'lucide-react'
 import SubirAlumnoForm from './SubirAlumnoForm'
 import type { Exercise } from '@/types/database'
 
@@ -15,7 +16,7 @@ export default async function AlumnoSubirPage() {
 
   return (
     <div className="space-y-5 animate-in fade-in-0 duration-200">
-      <Link href="/alumno" className="text-sm text-gray-500 hover:text-gray-800">← Volver</Link>
+      <Link href="/alumno" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800"><ChevronLeft className="w-3.5 h-3.5" /> Volver</Link>
       <div>
         <h1 className="text-xl font-semibold">Subir entrega</h1>
         <p className="text-sm text-gray-500">Sube tu archivo <code>.ipynb</code> para el ejercicio que elijas.</p>

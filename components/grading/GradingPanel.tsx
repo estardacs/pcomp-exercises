@@ -6,6 +6,7 @@ import AnswerCard from './AnswerCard'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
+import { ChevronRight, ChevronLeft, Send } from 'lucide-react'
 
 interface Props {
   currentSub: SubmissionWithGrades
@@ -124,7 +125,7 @@ export default function GradingPanel({
 
         <div className="flex items-center justify-between pt-2 gap-2 flex-wrap">
           <Button variant="ghost" size="sm" disabled={currentIdx === 0} onClick={onPrev}>
-            ← Anterior
+            <span className="flex items-center gap-1.5"><ChevronLeft className="w-4 h-4" /> Anterior</span>
           </Button>
           {isEditable && (
             <div className="flex gap-2 flex-wrap justify-center">
@@ -144,7 +145,7 @@ export default function GradingPanel({
                 disabled={!canSyncNota || syncingNota}
                 className="border-blue-300 text-blue-700 hover:bg-blue-50"
               >
-                {syncingNota ? 'Enviando…' : 'Enviar nota al Excel →'}
+                {syncingNota ? 'Enviando…' : <span className="flex items-center gap-1.5">Enviar nota al Excel <Send className="w-3.5 h-3.5" /></span>}
               </Button>
             </div>
           )}
@@ -154,7 +155,7 @@ export default function GradingPanel({
             disabled={currentIdx === submissionsLength - 1}
             onClick={onNext}
           >
-            Siguiente →
+            <span className="flex items-center gap-1.5">Siguiente <ChevronRight className="w-4 h-4" /></span>
           </Button>
         </div>
       </div>

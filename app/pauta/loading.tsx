@@ -3,9 +3,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <GraderNavSkeleton />
-      <main className="max-w-3xl mx-auto px-6 py-8 space-y-8">
+    <GraderNavSkeleton>
+      <div className="px-8 py-8 space-y-8">
         <Skeleton className="h-6 w-56" />
         {Array.from({ length: 3 }).map((_, g) => (
           <div key={g} className="space-y-2">
@@ -17,7 +16,7 @@ export default function Loading() {
             </div>
           </div>
         ))}
-      </main>
-    </div>
+      </div>
+    </GraderNavSkeleton>
   )
 }

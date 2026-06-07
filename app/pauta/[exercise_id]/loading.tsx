@@ -10,7 +10,7 @@ export default function Loading() {
         </div>
         <Skeleton className="h-9 w-36" />
       </nav>
-      <main className="max-w-3xl mx-auto px-6 py-8 space-y-4">
+      <main className="px-8 py-8 space-y-4">
         {Array.from({ length: 5 }).map((_, i) => (
           <Skeleton key={i} className="h-32 w-full" />
         ))}

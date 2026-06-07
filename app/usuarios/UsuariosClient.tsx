@@ -116,7 +116,7 @@ export default function UsuariosClient({ users, currentUserId }: Props) {
   const ayudantes = users.filter(u => u.role === 'ayudante')
 
   return (
-    <main className="max-w-2xl mx-auto px-6 py-8 space-y-8 animate-in fade-in-0 duration-200">
+    <main className="px-8 py-8 space-y-8 animate-in fade-in-0 duration-200">
         <h1 className="text-xl font-semibold">Usuarios</h1>
 
         {/* Change own password */}

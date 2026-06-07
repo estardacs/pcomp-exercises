@@ -3,6 +3,7 @@ import { requireGraderPage } from '@/lib/auth'
 import AppShell from '@/components/AppShell'
 import type { Exercise } from '@/types/database'
 import { Badge } from '@/components/ui/badge'
+import { ChevronRight } from 'lucide-react'
 
 export default async function PautasPage() {
   const { profile, supabase } = await requireGraderPage()
@@ -15,7 +16,7 @@ export default async function PautasPage() {
 
   return (
     <AppShell name={profile.name} role={profile.role} active="/pauta">
-      <main className="max-w-3xl mx-auto px-6 py-8 space-y-8 animate-in fade-in-0 duration-200">
+      <main className="px-8 py-8 space-y-8 animate-in fade-in-0 duration-200">
         <div>
           <h1 className="text-xl font-semibold">Pautas de corrección</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -52,7 +53,9 @@ export default async function PautasPage() {
                         ) : (
                           <span className="text-amber-500">Sin pauta</span>
                         )}
-                        <span className="text-blue-500 group-hover:underline">Editar →</span>
+                        <span className="text-blue-500 group-hover:underline inline-flex items-center gap-1">
+                          Editar <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
                       </div>
                     </Link>
                   )

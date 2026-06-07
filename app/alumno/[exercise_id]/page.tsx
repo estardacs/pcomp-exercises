@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { requireStudentPage } from '@/lib/auth'
+import { ChevronLeft } from 'lucide-react'
 import { scoreToNota, formatNotaChilena } from '@/lib/grade-converter'
 import { Button } from '@/components/ui/button'
 import CellOutputView from '@/components/grading/CellOutputView'
@@ -29,7 +30,7 @@ export default async function AlumnoExercisePage({ params }: Props) {
   const submission = subRaw as Submission | null
 
   const back = (
-    <Link href="/alumno" className="text-sm text-gray-500 hover:text-gray-800">← Volver</Link>
+    <Link href="/alumno" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-800"><ChevronLeft className="w-3.5 h-3.5" /> Volver</Link>
   )
 
   if (!submission) {

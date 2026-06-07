@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { ChevronRight, ChevronLeft } from 'lucide-react'
 
 const SYNCABLE_EXERCISES = new Set(
   Array.from({ length: 13 }, (_, i) => `E${String(i + 1).padStart(2, '0')}`)
@@ -234,7 +235,7 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="bg-white border-b px-6 py-3 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-gray-400 hover:text-gray-600 text-sm">← Dashboard</Link>
+            <Link href="/dashboard" className="inline-flex items-center gap-1 text-gray-400 hover:text-gray-600 text-sm"><ChevronLeft className="w-3.5 h-3.5" /> Dashboard</Link>
             <span className="text-gray-300">|</span>
             <span className="font-semibold">{exercise.id}: {exercise.title}</span>
             <Link href={`/pauta/${exercise.id}`} className="text-xs text-gray-400 hover:text-blue-600 underline">Editar pauta</Link>
@@ -263,7 +264,7 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
             disabled={currentIdx === 0}
             onClick={() => setCurrentId(submissions[currentIdx - 1].id)}
           >
-            ← Anterior
+            <span className="flex items-center gap-1.5"><ChevronLeft className="w-4 h-4" /> Anterior</span>
           </Button>
           <div className="flex items-center gap-3 min-w-0">
             <span className="font-medium shrink-0">
@@ -295,7 +296,7 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
             disabled={currentIdx === submissions.length - 1}
             onClick={() => setCurrentId(submissions[currentIdx + 1].id)}
           >
-            Siguiente →
+            <span className="flex items-center gap-1.5">Siguiente <ChevronRight className="w-4 h-4" /></span>
           </Button>
         </div>
 

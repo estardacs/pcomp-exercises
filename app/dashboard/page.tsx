@@ -4,6 +4,7 @@ import AppShell from '@/components/AppShell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { PenLine, Eye } from 'lucide-react'
 
 export default async function DashboardPage() {
   const { user, profile, supabase } = await requireGraderPage()
@@ -33,7 +34,7 @@ export default async function DashboardPage() {
 
   return (
     <AppShell name={profile.name} role={profile.role} active="/dashboard">
-      <main className="max-w-6xl mx-auto px-6 py-8 animate-in fade-in-0 duration-200">
+      <main className="px-8 py-8 animate-in fade-in-0 duration-200">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         <Stat label="Entregas" value={totalSubs} />
         <Stat label="Revisadas" value={`${totalDone}`} sub={`${globalPct}%`} />
@@ -83,20 +84,20 @@ export default async function DashboardPage() {
                       {mine > 0 ? (
                         <>
                           <Link href={`/corregir/${ex.id}?mine=true`} className="flex-1">
-                            <Button size="sm" className="w-full" variant={mineDone === mine ? 'outline' : 'default'}>
-                              {mineDone === mine ? '✓ Mis tareas listas' : 'Corregir mis tareas →'}
+                            <Button size="sm" className="w-full gap-1.5" variant={mineDone === mine ? 'outline' : 'default'}>
+                              {mineDone === mine ? '✓ Mis tareas listas' : <><PenLine className="w-3.5 h-3.5" /> Corregir mis tareas</>}
                             </Button>
                           </Link>
                           <Link href={`/corregir/${ex.id}`}>
-                            <Button size="sm" variant="ghost" className="text-xs text-gray-400 px-2">
-                              Ver todas
+                            <Button size="sm" variant="ghost" className="text-xs text-gray-400 px-2 gap-1">
+                              Ver todas <Eye className="w-3 h-3" />
                             </Button>
                           </Link>
                         </>
                       ) : (
                         <Link href={`/corregir/${ex.id}`} className="flex-1">
-                          <Button size="sm" className="w-full" variant="outline">
-                            Ver todas →
+                          <Button size="sm" className="w-full gap-1" variant="outline">
+                            Ver todas <Eye className="w-3.5 h-3.5" />
                           </Button>
                         </Link>
                       )}

@@ -84,7 +84,7 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-8 space-y-6 animate-in fade-in-0 duration-200">
+    <main className="px-8 py-8 space-y-6 animate-in fade-in-0 duration-200">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold">Resultados</h1>
           <Button size="sm" onClick={exportExcel}>Exportar Excel</Button>

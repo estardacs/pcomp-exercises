@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { Upload } from 'lucide-react'
 
 interface ExerciseSummary {
   id: string
@@ -74,7 +75,7 @@ export default function AsignacionesClient({ exercises, users, submissions }: Pr
   const totalUnassigned = submissions.filter(s => !s.assigned_to).length
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-8 space-y-6 animate-in fade-in-0 duration-200">
+    <main className="px-8 py-8 space-y-6 animate-in fade-in-0 duration-200">
         <h1 className="text-xl font-semibold">Asignaciones</h1>
 
         {/* Summary cards */}
@@ -133,7 +134,9 @@ export default function AsignacionesClient({ exercises, users, submissions }: Pr
         {exercisesWithSubs.length === 0 ? (
           <div className="bg-white rounded-lg border p-8 text-center text-gray-500">
             No hay notebooks subidos aún.{' '}
-            <Link href="/subir" className="text-blue-600 underline cursor-pointer">Subir tareas →</Link>
+            <Link href="/subir" className="text-blue-600 underline cursor-pointer inline-flex items-center gap-1">
+              Subir tareas <Upload className="w-3.5 h-3.5" />
+            </Link>
           </div>
         ) : (
           <div className="bg-white rounded-lg border divide-y">

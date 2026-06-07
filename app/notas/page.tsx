@@ -17,7 +17,7 @@ export default async function NotasPage() {
 
   return (
     <AppShell name={profile.name} role={profile.role} active="/notas">
-      <main className="px-6 py-6 animate-in fade-in-0 duration-200">
+      <main className="px-8 py-8 animate-in fade-in-0 duration-200">
         <div className="flex items-center justify-between mb-4">
           <h1 className="font-bold text-lg">Notas del curso</h1>
           <a href="/api/notas/export">

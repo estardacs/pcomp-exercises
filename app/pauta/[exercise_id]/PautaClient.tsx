@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { useRouter } from 'next/navigation'
+import { ChevronLeft } from 'lucide-react'
 
 interface Props {
   exercise: Exercise
@@ -43,8 +44,8 @@ export default function PautaClient({ exercise }: Props) {
     <div className="min-h-screen bg-gray-50 animate-in fade-in-0 duration-200">
       <nav className="bg-white border-b px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button onClick={() => router.back()} className="text-gray-500 hover:text-gray-800 text-sm">
-            ← Volver
+          <button onClick={() => router.back()} className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-800 text-sm">
+            <ChevronLeft className="w-3.5 h-3.5" /> Volver
           </button>
           <h1 className="font-semibold">{exercise.id}: {exercise.title} - Editar pauta</h1>
         </div>
@@ -56,7 +57,7 @@ export default function PautaClient({ exercise }: Props) {
         </div>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-8 space-y-4">
+      <main className="px-8 py-8 space-y-4">
         {rubrica.questions.map(q => (
           <div key={q.n} className="bg-white border rounded-lg overflow-hidden">
             <div className="px-4 py-3 border-b flex items-center gap-3 bg-gray-50">

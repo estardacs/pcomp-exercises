@@ -1,21 +1,35 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import {
+  LayoutDashboard,
+  Upload,
+  ClipboardList,
+  BookOpen,
+  TableProperties,
+  Users,
+  LogOut,
+} from 'lucide-react'
 
 interface NavItem {
   href: string
   label: string
+  icon: React.ElementType
   profesorOnly?: boolean
 }
 
 const NAV: NavItem[] = [
-  { href: '/subir', label: 'Subir tareas' },
-  { href: '/asignaciones', label: 'Asignaciones' },
-  { href: '/corregir', label: 'Corregir' },
-  { href: '/pauta', label: 'Pautas' },
-  { href: '/resultados', label: 'Resultados' },
-  { href: '/notas', label: 'Notas curso' },
-  { href: '/usuarios', label: 'Usuarios', profesorOnly: true },
+  { href: '/dashboard',    label: 'Inicio',       icon: LayoutDashboard },
+  { href: '/subir',        label: 'Subir tareas', icon: Upload },
+  { href: '/asignaciones', label: 'Asignaciones', icon: ClipboardList },
+  { href: '/pauta',        label: 'Pautas',       icon: BookOpen },
+  { href: '/notas',        label: 'Notas',        icon: TableProperties },
+  { href: '/usuarios',     label: 'Usuarios',     icon: Users, profesorOnly: true },
 ]
+
+const ROLE_LABEL: Record<string, string> = {
+  profesor: 'Profesor',
+  ayudante: 'Ayudante',
+  alumno: 'Alumno',
+}
 
 interface Props {
   name: string
@@ -24,41 +38,77 @@ interface Props {
   children: React.ReactNode
 }
 
-/** Shared top-nav shell for grader pages. */
 export default function AppShell({ name, role, active, children }: Props) {
   const items = NAV.filter(i => !i.profesorOnly || role === 'profesor')
+  const initials = name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-          <Link href="/dashboard" className="font-bold tracking-tight shrink-0">
-            Corrector <span className="text-blue-600">DNO1063</span>
+    <div className="flex h-screen overflow-hidden bg-gray-50">
+      {/* Sidebar */}
+      <aside className="w-[220px] shrink-0 flex flex-col bg-white border-r border-gray-100 h-full">
+
+        {/* Brand */}
+        <div className="px-5 pt-5 pb-4 border-b border-gray-100">
+          <Link href="/dashboard" className="block group">
+            <p className="text-[10px] font-mono text-gray-400 tracking-[0.18em] uppercase">DNO1063</p>
+            <p className="font-bold text-gray-900 text-[15px] leading-snug mt-0.5 group-hover:text-blue-700 transition-colors">
+              Pensamiento<br/>Computacional
+            </p>
           </Link>
-          <div className="flex items-center gap-1 overflow-x-auto">
-            {items.map(i => (
+        </div>
+
+        {/* Nav items */}
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+          {items.map(({ href, label, icon: Icon }) => {
+            const isActive = active === href ||
+              (href !== '/dashboard' && !!active?.startsWith(href))
+            return (
               <Link
-                key={i.href}
-                href={i.href}
-                className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm transition-colors ${
-                  active === i.href
-                    ? 'bg-blue-50 text-blue-700 font-medium'
-                    : 'text-gray-600 hover:bg-gray-100'
+                key={href}
+                href={href}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-blue-50 text-blue-700'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
-                {i.label}
+                <Icon
+                  className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-400'}`}
+                />
+                {label}
               </Link>
-            ))}
+            )
+          })}
+        </nav>
+
+        {/* User + logout */}
+        <div className="border-t border-gray-100 px-4 py-4">
+          <div className="flex items-center gap-3 mb-3 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+              <span className="text-white text-[11px] font-bold tracking-wide">{initials}</span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate leading-tight">{name}</p>
+              <p className="text-[11px] text-gray-400 leading-tight mt-0.5">{ROLE_LABEL[role]}</p>
+            </div>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <span className="text-sm text-gray-500 hidden md:inline">{name}</span>
-            <form action="/api/auth/logout" method="POST">
-              <Button variant="ghost" size="sm" type="submit">Salir</Button>
-            </form>
-          </div>
+          <form action="/api/auth/logout" method="POST">
+            <button
+              type="submit"
+              className="w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
+            >
+              <LogOut className="w-3.5 h-3.5 shrink-0" />
+              Cerrar sesión
+            </button>
+          </form>
         </div>
-      </nav>
-      {children}
+
+      </aside>
+
+      {/* Main content area */}
+      <div className="flex-1 overflow-y-auto">
+        {children}
+      </div>
     </div>
   )
 }
