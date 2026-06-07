@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     email,
     options: {
       redirectTo: `${origin}/auth/callback`,
-      data: { full_name: displayName },
+      data: { name: displayName },
     },
   })
 
