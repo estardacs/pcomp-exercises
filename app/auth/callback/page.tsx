@@ -4,35 +4,42 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 // Supabase redirects here after processing the magic-link (implicit flow).
-// The access token arrives in the URL hash (#access_token=...).
-// The browser client detects it automatically and fires onAuthStateChange.
+// The access token arrives in the URL hash: #access_token=...&refresh_token=...
+// We parse it explicitly and call setSession so @supabase/ssr stores it in cookies.
 export default function AuthCallback() {
   const router = useRouter()
 
   useEffect(() => {
     const supabase = createClient()
-    let done = false
 
-    async function handleSession(userId: string) {
-      if (done) return
-      done = true
+    async function handle() {
+      // Parse hash fragment
+      const params = new URLSearchParams(window.location.hash.slice(1))
+      const access_token = params.get('access_token')
+      const refresh_token = params.get('refresh_token') ?? ''
+
+      if (!access_token) {
+        router.replace('/login?error=session_failed')
+        return
+      }
+
+      const { data, error } = await supabase.auth.setSession({ access_token, refresh_token })
+
+      if (error || !data.session) {
+        router.replace('/login?error=session_failed')
+        return
+      }
+
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', userId)
+        .eq('id', data.session.user.id)
         .single()
+
       router.replace(profile?.role === 'alumno' ? '/alumno' : '/dashboard')
     }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => { if (session) handleSession(session.user.id) }
-    )
-
-    const fallback = setTimeout(() => {
-      if (!done) { done = true; router.replace('/login?error=session_failed') }
-    }, 8000)
-
-    return () => { subscription.unsubscribe(); clearTimeout(fallback) }
+    handle()
   }, [router])
 
   return (
