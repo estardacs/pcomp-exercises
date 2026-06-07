@@ -19,9 +19,9 @@ export default async function NotasPage() {
     <AppShell name={profile.name} role={profile.role} active="/notas">
       <main className="px-6 py-6 animate-in fade-in-0 duration-200">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="font-bold text-lg">Notas del curso - PCOMP 2026A</h1>
-          <a href="/api/notas?download=1">
-            <Button variant="outline" size="sm">Exportar CSV</Button>
+          <h1 className="font-bold text-lg">Notas del curso</h1>
+          <a href="/api/notas/export">
+            <Button variant="outline" size="sm">Exportar Excel</Button>
           </a>
         </div>
         <NotasClient sheet={sheet} synced={synced} />
