@@ -232,10 +232,6 @@ export default function LoginPage() {
           <h2 className="text-[1.75rem] font-bold text-gray-900 leading-tight mb-2">
             Ingresar al curso
           </h2>
-          <p className="text-gray-500 text-[15px] mb-8 leading-relaxed">
-            Usa tu cuenta UC para acceder a la plataforma.
-          </p>
-
           {error && (
             <div className="mb-6 px-4 py-3.5 rounded-2xl text-sm text-red-700 leading-snug"
               style={{ background: '#FEF2F2', border: '1px solid #FCA5A5' }}>
@@ -252,10 +248,6 @@ export default function LoginPage() {
               }}
               type="button"
             >
-              <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
-                style={{ background: 'rgba(255,255,255,0.2)' }}>
-                UC
-              </span>
               Ingresar con cuenta UC
             </button>
           </a>
