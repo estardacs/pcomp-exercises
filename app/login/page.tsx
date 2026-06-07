@@ -15,6 +15,7 @@ const CAS_ERROR_MESSAGES: Record<string, string> = {
   cas_no_user: 'CAS no retorno un usuario valido.',
   auth_failed: 'No se pudo crear la sesion despues de autentificar con UC.',
   session_failed: 'No se pudo establecer la sesion. Intentalo nuevamente.',
+  not_enrolled: 'Tu cuenta UC no esta inscrita en este curso.',
 }
 
 export default function LoginPage() {

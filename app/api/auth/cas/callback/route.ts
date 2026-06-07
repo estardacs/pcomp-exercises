@@ -47,11 +47,14 @@ export async function GET(request: NextRequest) {
 
   const username = casUsername.toLowerCase()
 
-  // UC uses @uc.cl for older cohorts and @estudiante.uc.cl for newer ones.
-  // Look up which domain this user is registered under; default to @uc.cl for new users.
+  // Only users already provisioned in the system can log in.
+  // This prevents arbitrary UC accounts from gaining access.
   const admin = createServiceClient()
   const { data: existingEmail } = await admin.rpc('find_uc_email', { p_username: username })
-  const email = (existingEmail as string | null) ?? `${username}@uc.cl`
+  if (!existingEmail) {
+    return NextResponse.redirect(`${origin}/login?error=not_enrolled`)
+  }
+  const email = existingEmail as string
 
   // Extract optional attributes UC CAS may return.
   const displayName =
