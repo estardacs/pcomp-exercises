@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireGraderApi } from '@/lib/auth'
 import { scoreToNota } from '@/lib/grade-converter'
 import { updateExerciseGrade, exerciseColumnIndex } from '@/lib/grades-sheet'
-import type { Profile, Submission, Exercise } from '@/types/database'
+import type { Submission, Exercise } from '@/types/database'
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profileRaw } = await supabase.from('profiles').select('role').eq('id', user.id).single() as any
-  const profile = profileRaw as Pick<Profile, 'role'> | null
-  if (!profile) return NextResponse.json({ error: 'Perfil no encontrado' }, { status: 403 })
+  const auth = await requireGraderApi()
+  if (auth.error) return auth.error
+  const { user, profile, supabase } = auth
 
   const body = await req.json()
   const { submission_id } = body as { submission_id?: string }

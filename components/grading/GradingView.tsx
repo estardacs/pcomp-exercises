@@ -221,7 +221,7 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 font-sans">
+    <div className="flex h-screen overflow-hidden bg-gray-50 font-sans animate-in fade-in-0 duration-200">
       <StudentSidebar
         submissions={submissions}
         gradesMap={gradesMap}

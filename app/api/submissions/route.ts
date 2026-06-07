@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
+import { requireGraderApi } from '@/lib/auth'
 import { parseFilename } from '@/lib/filename-parser'
 import { parseNotebook } from '@/lib/notebook-parser'
 
 export async function POST(req: NextRequest) {
+  const auth = await requireGraderApi()
+  if (auth.error) return auth.error
+
   const supabase = createServiceClient()
 
   const formData = await req.formData()
@@ -41,6 +45,7 @@ export async function POST(req: NextRequest) {
         filename: file.name,
         notebook_storage_path: storagePath,
         notebook_json,
+        uploaded_by: auth.user.id,
         status: 'unassigned',
       }, { onConflict: 'exercise_id,student_rut' })
 

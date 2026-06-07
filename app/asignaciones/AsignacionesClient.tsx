@@ -74,13 +74,8 @@ export default function AsignacionesClient({ exercises, users, submissions }: Pr
   const totalUnassigned = submissions.filter(s => !s.assigned_to).length
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b px-6 py-4 flex items-center gap-4">
-        <Link href="/dashboard" className="text-gray-500 hover:text-gray-800 text-sm cursor-pointer">← Dashboard</Link>
-        <h1 className="font-semibold">Asignaciones</h1>
-      </nav>
-
-      <main className="max-w-5xl mx-auto px-6 py-8 space-y-6">
+    <main className="max-w-5xl mx-auto px-6 py-8 space-y-6 animate-in fade-in-0 duration-200">
+        <h1 className="text-xl font-semibold">Asignaciones</h1>
 
         {/* Summary cards */}
         <div className="grid grid-cols-3 gap-4">
@@ -214,7 +209,6 @@ export default function AsignacionesClient({ exercises, users, submissions }: Pr
             })}
           </div>
         )}
-      </main>
-    </div>
+    </main>
   )
 }

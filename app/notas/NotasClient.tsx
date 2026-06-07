@@ -87,7 +87,7 @@ export default function NotasClient({ sheet, synced }: Props) {
                           EXERCISE_IDS.includes(col.label) ? 'bg-blue-50/30 font-mono text-center' : ''
                         } ${highlighted ? 'ring-2 ring-inset ring-green-400 bg-green-50' : ''}`}
                       >
-                        {value || '—'}
+                        {value || '-'}
                       </td>
                     )
                   })}

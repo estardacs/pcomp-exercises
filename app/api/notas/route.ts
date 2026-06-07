@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireGraderApi } from '@/lib/auth'
 import { loadGradesSheetData, getGradesCsvContent } from '@/lib/grades-sheet'
 import type { Submission } from '@/types/database'
 
 export async function GET(req: Request) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  const auth = await requireGraderApi()
+  if (auth.error) return auth.error
+  const supabase = auth.supabase
 
   const url = new URL(req.url)
   if (url.searchParams.get('download') === '1') {

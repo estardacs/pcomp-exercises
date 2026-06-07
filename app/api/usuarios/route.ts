@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
+import { requireProfesorApi } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  const auth = await requireProfesorApi()
+  if (auth.error) return auth.error
 
   const { name, email, password, role = 'ayudante' } = await request.json()
   if (!name || !email || !password) {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     email,
     password,
     email_confirm: true,
-    user_metadata: { name },
+    user_metadata: { name, role },
   })
 
   if (error) {
@@ -33,9 +33,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  const auth = await requireProfesorApi()
+  if (auth.error) return auth.error
 
   const { id, role } = await request.json()
   if (!id || !role) return NextResponse.json({ error: 'Faltan campos' }, { status: 400 })
@@ -48,12 +47,11 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  const auth = await requireProfesorApi()
+  if (auth.error) return auth.error
 
   const { id } = await request.json()
-  if (id === user.id) return NextResponse.json({ error: 'No puedes eliminarte a ti mismo' }, { status: 400 })
+  if (id === auth.user.id) return NextResponse.json({ error: 'No puedes eliminarte a ti mismo' }, { status: 400 })
 
   const admin = createServiceClient()
   const { error } = await admin.auth.admin.deleteUser(id)

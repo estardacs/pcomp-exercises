@@ -1,16 +1,18 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { requireGraderPage } from '@/lib/auth'
+import AppShell from '@/components/AppShell'
 import UsuariosClient from './UsuariosClient'
 import type { Profile } from '@/types/database'
 
 export default async function UsuariosPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const { user, profile, supabase } = await requireGraderPage()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: usersRaw } = await supabase.from('profiles').select('*').order('name') as any
+  const { data: usersRaw } = await supabase.from('profiles').select('*').in('role', ['profesor', 'ayudante']).order('name') as any
   const users = (usersRaw ?? []) as Profile[]
 
-  return <UsuariosClient users={users} currentUserId={user.id} />
+  return (
+    <AppShell name={profile.name} role={profile.role} active="/usuarios">
+      <UsuariosClient users={users} currentUserId={user.id} />
+    </AppShell>
+  )
 }

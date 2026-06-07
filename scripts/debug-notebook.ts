@@ -28,7 +28,7 @@ async function main() {
       if (matches) { sepIdx = i; console.log(`Separator at [${i}]: ${JSON.stringify(firstLine)}`); break }
     }
   }
-  if (sepIdx === -1) console.log('NO SEPARATOR FOUND — checking all markdown cells:')
+  if (sepIdx === -1) console.log('NO SEPARATOR FOUND - checking all markdown cells:')
 
   nb.cells.forEach((c: { cell_type: string; source: string | string[] }, i: number) => {
     if (c.cell_type !== 'markdown') return

@@ -3,7 +3,8 @@ export type SubmissionStatus = 'unassigned' | 'pending' | 'in_progress' | 'done'
 export interface Profile {
   id: string
   name: string
-  role: 'profesor' | 'ayudante'
+  role: 'profesor' | 'ayudante' | 'alumno'
+  rut: string | null
   created_at: string
 }
 
@@ -36,6 +37,7 @@ export interface Exercise {
   total_points: number
   is_optional: boolean
   rubrica: ExerciseRubric
+  due_date: string | null
   created_at: string
 }
 

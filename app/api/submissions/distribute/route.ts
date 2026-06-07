@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
+import { requireGraderApi } from '@/lib/auth'
 
 export async function POST(req: Request) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  const auth = await requireGraderApi()
+  if (auth.error) return auth.error
 
   const body = await req.json().catch(() => ({}))
   const { exercise_id, user_ids } = body as { exercise_id?: string; user_ids?: string[] }

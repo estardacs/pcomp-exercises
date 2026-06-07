@@ -23,7 +23,7 @@ async function seed() {
     }, { onConflict: 'id' })
 
     if (error) console.error(`  ✗ ${id}:`, error.message)
-    else console.log(`  ✓ ${id} — ${data.title}`)
+    else console.log(`  ✓ ${id} - ${data.title}`)
   }
 
   console.log('Done.')

@@ -1,13 +1,11 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { requireGraderPage } from '@/lib/auth'
+import AppShell from '@/components/AppShell'
 import type { Exercise } from '@/types/database'
 import { Badge } from '@/components/ui/badge'
 
 export default async function PautasPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const { profile, supabase } = await requireGraderPage()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await supabase.from('exercises').select('*').order('id') as any
@@ -16,16 +14,14 @@ export default async function PautasPage() {
   const modules = ['M01', 'M02', 'M03']
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b px-6 py-4 flex items-center gap-4">
-        <Link href="/dashboard" className="text-gray-500 hover:text-gray-800 text-sm">← Dashboard</Link>
-        <h1 className="font-semibold">Pautas de corrección</h1>
-      </nav>
-
-      <main className="max-w-3xl mx-auto px-6 py-8 space-y-8">
-        <p className="text-sm text-gray-500">
-          Los cambios en una pauta se reflejan inmediatamente para todos los correctores.
-        </p>
+    <AppShell name={profile.name} role={profile.role} active="/pauta">
+      <main className="max-w-3xl mx-auto px-6 py-8 space-y-8 animate-in fade-in-0 duration-200">
+        <div>
+          <h1 className="text-xl font-semibold">Pautas de corrección</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Los cambios en una pauta se reflejan inmediatamente para todos los correctores.
+          </p>
+        </div>
 
         {modules.map(mod => {
           const exs = exercises.filter(e => e.module === mod)
@@ -66,6 +62,6 @@ export default async function PautasPage() {
           )
         })}
       </main>
-    </div>
+    </AppShell>
   )
 }

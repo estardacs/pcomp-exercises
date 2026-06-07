@@ -31,7 +31,8 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (user && isAuthRoute) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    // Route by role happens at '/' (server component reads the profile).
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
   return supabaseResponse

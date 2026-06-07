@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
+import { requireGraderApi } from '@/lib/auth'
 
 export async function POST(req: NextRequest) {
+  const auth = await requireGraderApi()
+  if (auth.error) return auth.error
+
   const supabase = createServiceClient()
   const { exercise_id, assigned_to } = await req.json()
 

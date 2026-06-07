@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react'
 import type { Submission, QuestionGrade } from '@/types/database'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
 
 interface Props {
   submissions: Submission[]
@@ -83,16 +82,12 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="text-gray-500 hover:text-gray-800 text-sm">← Dashboard</Link>
-          <h1 className="font-semibold">Resultados</h1>
+    <main className="max-w-7xl mx-auto px-6 py-8 space-y-6 animate-in fade-in-0 duration-200">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-semibold">Resultados</h1>
+          <Button size="sm" onClick={exportCSV}>Exportar CSV</Button>
         </div>
-        <Button size="sm" onClick={exportCSV}>Exportar CSV</Button>
-      </nav>
 
-      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Summary cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white border rounded-lg p-4">
@@ -228,7 +223,6 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
             </table>
           </div>
         </div>
-      </main>
-    </div>
+    </main>
   )
 }

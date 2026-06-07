@@ -53,13 +53,9 @@ export default function SubirPage() {
   const invalid = rows.filter(r => !r.parsed)
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b px-6 py-4 flex items-center gap-4">
-        <Link href="/dashboard" className="text-gray-500 hover:text-gray-800 text-sm">← Dashboard</Link>
-        <h1 className="font-semibold">Subir notebooks</h1>
-      </nav>
+    <main className="max-w-4xl mx-auto px-6 py-8 space-y-6 animate-in fade-in-0 duration-200">
+        <h1 className="text-xl font-semibold">Subir notebooks</h1>
 
-      <main className="max-w-4xl mx-auto px-6 py-8 space-y-6">
         {/* Drop zone */}
         <div
           onDrop={onDrop}
@@ -146,7 +142,6 @@ export default function SubirPage() {
             </Link>
           </div>
         )}
-      </main>
-    </div>
+    </main>
   )
 }

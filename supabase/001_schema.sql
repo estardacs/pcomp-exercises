@@ -1,5 +1,5 @@
 -- ============================================================
--- DNO1063 Corrector — Initial Schema
+-- DNO1063 Corrector - Initial Schema
 -- Run this in the Supabase SQL editor
 -- ============================================================
 

@@ -144,22 +144,22 @@
         "rut_indexed": false
       },
       {
-        "n": 3, "title": "Ciclos For — completar lista", "max_points": 1,
+        "n": 3, "title": "Ciclos For - completar lista", "max_points": 1,
         "criteria": "Lista de al menos 5 elementos, ciclo for que recorre e imprime cada elemento",
         "rut_indexed": false
       },
       {
-        "n": 4, "title": "Listas — rescatar palabras", "max_points": 1,
+        "n": 4, "title": "Listas - rescatar palabras", "max_points": 1,
         "criteria": "Accede a elementos de listas existentes por índice y los guarda en nuevas variables",
         "rut_indexed": false
       },
       {
-        "n": 5, "title": "Listas — completar frase", "max_points": 1,
+        "n": 5, "title": "Listas - completar frase", "max_points": 1,
         "criteria": "Construye una frase concatenando elementos extraídos de listas del ejercicio, resultado coherente",
         "rut_indexed": false
       },
       {
-        "n": 6, "title": "Integrar — algoritmo completo", "max_points": 1,
+        "n": 6, "title": "Integrar - algoritmo completo", "max_points": 1,
         "criteria": "Combina variables, lista, ciclo for y if/else en un algoritmo coherente que produzca output significativo",
         "rut_indexed": false
       }
@@ -176,17 +176,17 @@
         "rut_indexed": false
       },
       {
-        "n": 2, "title": "Mini gráfico Matplotlib — profesiones y sueldos", "max_points": 1,
+        "n": 2, "title": "Mini gráfico Matplotlib - profesiones y sueldos", "max_points": 1,
         "criteria": "plt.bar() o plt.barh() con las listas del ejercicio anterior, plt.show(), sin errores",
         "rut_indexed": false
       },
       {
-        "n": 3, "title": "Color — degradado de 10 pasos", "max_points": 1,
+        "n": 3, "title": "Color - degradado de 10 pasos", "max_points": 1,
         "criteria": "Lista de 10 colores RGB interpolados entre 2 colores extremos, visualizado con matplotlib",
         "rut_indexed": false
       },
       {
-        "n": 4, "title": "Color — bandera horizontal", "max_points": 1,
+        "n": 4, "title": "Color - bandera horizontal", "max_points": 1,
         "criteria": "Dibuja la bandera correcta según su dígito de RUT con franjas horizontales en colores correctos",
         "rut_indexed": true,
         "rut_map": {
@@ -205,7 +205,7 @@
         "expected_template": "Bandera horizontal esperada: {selection}"
       },
       {
-        "n": 5, "title": "Color — bandera vertical", "max_points": 1,
+        "n": 5, "title": "Color - bandera vertical", "max_points": 1,
         "criteria": "Dibuja la bandera correcta según su dígito de RUT con franjas verticales en colores correctos",
         "rut_indexed": true,
         "rut_map": {
@@ -224,7 +224,7 @@
         "expected_template": "Bandera vertical esperada: {selection}"
       },
       {
-        "n": 6, "title": "Formas y Texto — ordenar por tamaño y color", "max_points": 1,
+        "n": 6, "title": "Formas y Texto - ordenar por tamaño y color", "max_points": 1,
         "criteria": "Muestra texto con matplotlib con al menos 3 tamaños distintos y 3 colores distintos, ordenados coherentemente",
         "rut_indexed": false
       }
@@ -236,7 +236,7 @@
     "total_points": 6,
     "questions": [
       {
-        "n": 1, "title": "Casting — sumar dígitos del RUT", "max_points": 1,
+        "n": 1, "title": "Casting - sumar dígitos del RUT", "max_points": 1,
         "criteria": "RUT como string, extrae cada dígito, convierte a int con int(), suma y muestra total",
         "rut_indexed": false
       },
@@ -375,17 +375,17 @@
     "total_points": 1,
     "questions": [
       {
-        "n": 1, "title": "Audio — ondas sintéticas", "max_points": 1,
+        "n": 1, "title": "Audio - ondas sintéticas", "max_points": 1,
         "criteria": "Genera y reproduce al menos 2 tipos de onda (sine, square, sawtooth, etc.) con variables definidas",
         "rut_indexed": false
       },
       {
-        "n": 2, "title": "Audio — cargar 5 samples", "max_points": 0,
+        "n": 2, "title": "Audio - cargar 5 samples", "max_points": 0,
         "criteria": "Carga 5 samples desde la carpeta snd usando librería wave o similar, reproduce con Audio()",
         "rut_indexed": false
       },
       {
-        "n": 3, "title": "Audio — graficar ondas", "max_points": 0,
+        "n": 3, "title": "Audio - graficar ondas", "max_points": 0,
         "criteria": "Grafica la forma de onda de al menos 3 samples distintos usando plt",
         "rut_indexed": false
       }

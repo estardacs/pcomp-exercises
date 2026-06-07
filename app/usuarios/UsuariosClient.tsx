@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
 import type { Profile } from '@/types/database'
 import { createClient } from '@/lib/supabase/client'
 
@@ -30,6 +29,27 @@ export default function UsuariosClient({ users, currentUserId }: Props) {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [changingPassword, setChangingPassword] = useState(false)
   const [passwordMsg, setPasswordMsg] = useState<{ ok: boolean; text: string } | null>(null)
+
+  const [provisioning, setProvisioning] = useState(false)
+  const [provisionMsg, setProvisionMsg] = useState<{ ok: boolean; text: string } | null>(null)
+
+  async function provisionAlumnos() {
+    setProvisioning(true)
+    setProvisionMsg(null)
+    try {
+      const res = await fetch('/api/alumno/provision', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) {
+        setProvisionMsg({ ok: false, text: data.error ?? 'No se pudo provisionar' })
+      } else {
+        const extra = data.errors?.length ? ` · ${data.errors.length} con error` : ''
+        setProvisionMsg({ ok: true, text: `${data.created} creadas, ${data.linked} vinculadas, ${data.skipped} omitidas${extra}` })
+      }
+    } catch {
+      setProvisionMsg({ ok: false, text: 'Error de conexión' })
+    }
+    setProvisioning(false)
+  }
 
   async function createUser(e: React.FormEvent) {
     e.preventDefault()
@@ -96,13 +116,8 @@ export default function UsuariosClient({ users, currentUserId }: Props) {
   const ayudantes = users.filter(u => u.role === 'ayudante')
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b px-6 py-4 flex items-center gap-4">
-        <Link href="/dashboard" className="text-gray-500 hover:text-gray-800 text-sm">← Dashboard</Link>
-        <h1 className="font-semibold">Usuarios</h1>
-      </nav>
-
-      <main className="max-w-2xl mx-auto px-6 py-8 space-y-8">
+    <main className="max-w-2xl mx-auto px-6 py-8 space-y-8 animate-in fade-in-0 duration-200">
+        <h1 className="text-xl font-semibold">Usuarios</h1>
 
         {/* Change own password */}
         <div className="bg-white border rounded-lg p-6 space-y-4">
@@ -127,6 +142,21 @@ export default function UsuariosClient({ users, currentUserId }: Props) {
               {changingPassword ? 'Guardando…' : 'Cambiar contraseña'}
             </Button>
           </form>
+        </div>
+
+        {/* Provision student accounts */}
+        <div className="bg-white border rounded-lg p-6 space-y-3">
+          <h2 className="font-semibold text-base">Cuentas de alumnos</h2>
+          <p className="text-sm text-gray-500">
+            Crea (o vincula) una cuenta para cada alumno de la lista del curso. La
+            contraseña inicial de cada alumno es su RUT sin puntos ni guión.
+          </p>
+          {provisionMsg && (
+            <p className={`text-sm ${provisionMsg.ok ? 'text-green-600' : 'text-red-600'}`}>{provisionMsg.text}</p>
+          )}
+          <Button onClick={provisionAlumnos} disabled={provisioning} variant="outline" className="w-full">
+            {provisioning ? 'Provisionando…' : 'Provisionar cuentas de alumnos'}
+          </Button>
         </div>
 
         {/* Create user */}
@@ -227,7 +257,6 @@ export default function UsuariosClient({ users, currentUserId }: Props) {
           )}
         </div>
 
-      </main>
-    </div>
+    </main>
   )
 }

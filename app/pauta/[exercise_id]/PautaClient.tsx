@@ -5,7 +5,6 @@ import type { Exercise, ExerciseRubric, RubricQuestion } from '@/types/database'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 interface Props {
@@ -41,12 +40,12 @@ export default function PautaClient({ exercise }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 animate-in fade-in-0 duration-200">
       <nav className="bg-white border-b px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={`/corregir/${exercise.id}`} className="text-gray-500 hover:text-gray-800 text-sm">
-            ← Volver a corrección
-          </Link>
+          <button onClick={() => router.back()} className="text-gray-500 hover:text-gray-800 text-sm">
+            ← Volver
+          </button>
           <h1 className="font-semibold">{exercise.id}: {exercise.title} - Editar pauta</h1>
         </div>
         <div className="flex items-center gap-3">
