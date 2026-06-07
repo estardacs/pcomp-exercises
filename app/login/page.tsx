@@ -188,7 +188,7 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="relative z-10 login-drift w-full max-w-[460px] rounded-3xl px-12 py-14"
+        <div className="relative z-10 login-drift w-full max-w-[506px] rounded-3xl px-12 py-[84px]"
           style={{
             background: '#ffffff',
             border: '1px solid rgba(0,0,0,0.07)',
