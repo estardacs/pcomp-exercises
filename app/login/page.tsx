@@ -174,90 +174,65 @@ export default function LoginPage() {
       </div>
 
       {/* ══ PANEL DERECHO ══ */}
-      <div className="flex-1 flex flex-col relative overflow-hidden" style={{ background: '#ffffff' }}>
-
-        {/* Left accent stripe */}
-        <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{
-          background: 'linear-gradient(180deg, transparent 5%, #1B4B8A 30%, #3B82F6 60%, transparent 95%)',
-          opacity: 0.28,
-        }} />
+      <div className="flex-1 flex flex-col items-center justify-center relative overflow-hidden px-10"
+        style={{ background: '#EFF3F9' }}>
 
         {/* Subtle dot texture */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'radial-gradient(circle, rgba(27,75,138,0.04) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, rgba(27,75,138,0.055) 1px, transparent 1px)',
           backgroundSize: '22px 22px',
         }} />
 
         {/* Mobile header */}
-        <div className="lg:hidden relative z-10 px-8 pt-12 pb-8 text-center login-drift"
+        <div className="lg:hidden relative z-10 mb-8 text-center login-drift"
           style={{ animationDelay: '0.1s' }}>
           <h1 className="text-2xl font-bold text-gray-900">Pensamiento Computacional</h1>
           <p className="text-gray-500 text-sm mt-1">DNO1063 · 2026-A · Diseño · UC</p>
         </div>
 
-        {/* Main content */}
-        <div className="relative z-10 flex flex-col h-full px-12 py-12">
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="login-drift w-full max-w-[420px]" style={{ animationDelay: '0.25s' }}>
+        {/* Card */}
+        <div className="relative z-10 login-drift w-full max-w-[400px] rounded-3xl px-10 py-10"
+          style={{
+            background: '#ffffff',
+            border: '1px solid rgba(0,0,0,0.07)',
+            boxShadow: '0 8px 40px rgba(27,75,138,0.1), 0 1px 4px rgba(0,0,0,0.06)',
+            animationDelay: '0.25s',
+          }}>
 
-              <p className="text-[11px] font-mono text-gray-400 tracking-wider uppercase mb-3">
-                DNO1063 · 2026-A · Diseño · UC
-              </p>
-              <h2 className="text-[1.75rem] font-bold text-gray-900 leading-tight mb-2">
-                Ingresar al curso
-              </h2>
-              <p className="text-gray-500 text-[15px] mb-8 leading-relaxed">
-                Usa tu cuenta UC para acceder a la plataforma.
-              </p>
+          <p className="text-[11px] font-mono text-gray-400 tracking-wider uppercase mb-3">
+            DNO1063 · 2026-A · Diseño · UC
+          </p>
+          <h2 className="text-[1.75rem] font-bold text-gray-900 leading-tight mb-2">
+            Ingresar al curso
+          </h2>
+          <p className="text-gray-500 text-[15px] mb-8 leading-relaxed">
+            Usa tu cuenta UC para acceder a la plataforma.
+          </p>
 
-              {error && (
-                <div className="mb-6 px-4 py-3.5 rounded-2xl text-sm text-red-700 leading-snug"
-                  style={{ background: '#FEF2F2', border: '1px solid #FCA5A5' }}>
-                  {error}
-                </div>
-              )}
-
-              <a href="/api/auth/cas/login" className="block">
-                <button
-                  className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-150 active:scale-[0.98] hover:opacity-95"
-                  style={{
-                    background: 'linear-gradient(135deg, #1B4B8A 0%, #1e5dab 50%, #2563EB 100%)',
-                    boxShadow: '0 4px 20px rgba(27,75,138,0.38), 0 1px 4px rgba(27,75,138,0.25)',
-                  }}
-                  type="button"
-                >
-                  <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
-                    style={{ background: 'rgba(255,255,255,0.2)' }}>
-                    UC
-                  </span>
-                  Ingresar con cuenta UC
-                </button>
-              </a>
-
-              {/* Feature list */}
-              <div className="mt-10 pt-8 space-y-5" style={{ borderTop: '1px solid #f0f0f0' }}>
-                {[
-                  { num: '01', label: 'Sube tus ejercicios', sub: 'Notebooks .ipynb o scripts .py desde tu computador' },
-                  { num: '02', label: 'Recibe feedback detallado', sub: 'Resultados pregunta a pregunta con puntaje' },
-                  { num: '03', label: 'Sigue tu progreso', sub: 'Notas y estado de cada ejercicio del semestre' },
-                ].map(item => (
-                  <div key={item.num} className="flex items-start gap-4">
-                    <span className="font-mono text-[11px] tabular-nums shrink-0 mt-0.5"
-                      style={{ color: 'rgba(27,75,138,0.45)' }}>{item.num}</span>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-700 leading-tight">{item.label}</p>
-                      <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{item.sub}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
+          {error && (
+            <div className="mb-6 px-4 py-3.5 rounded-2xl text-sm text-red-700 leading-snug"
+              style={{ background: '#FEF2F2', border: '1px solid #FCA5A5' }}>
+              {error}
             </div>
-          </div>
+          )}
 
-          <div className="login-drift" style={{ animationDelay: '0.6s' }}>
-            <p className="text-xs text-gray-300">Facultad de Arquitectura, Diseño y Estudios Urbanos · UC</p>
-          </div>
+          <a href="/api/auth/cas/login" className="block">
+            <button
+              className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-150 active:scale-[0.98] hover:opacity-95"
+              style={{
+                background: 'linear-gradient(135deg, #1B4B8A 0%, #1e5dab 50%, #2563EB 100%)',
+                boxShadow: '0 4px 20px rgba(27,75,138,0.38), 0 1px 4px rgba(27,75,138,0.25)',
+              }}
+              type="button"
+            >
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
+                style={{ background: 'rgba(255,255,255,0.2)' }}>
+                UC
+              </span>
+              Ingresar con cuenta UC
+            </button>
+          </a>
+
         </div>
       </div>
 
