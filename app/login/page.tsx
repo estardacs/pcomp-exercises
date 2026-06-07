@@ -54,13 +54,10 @@ const OUTPUT_DELAY_MS = 1800
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
-  const [showOutput, setShowOutput] = useState(false)
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('error')
     if (code) setError(ERROR_MESSAGES[code] ?? `Error inesperado: ${code}`)
-    const t = setTimeout(() => setShowOutput(true), OUTPUT_DELAY_MS)
-    return () => clearTimeout(t)
   }, [])
 
   return (
@@ -155,9 +152,9 @@ export default function LoginPage() {
                 </div>
                 <div className="px-5 pb-5 font-mono text-[12.5px] leading-[1.8]"
                   style={{ color: 'rgba(255,255,255,0.38)', minHeight: '6rem' }}>
-                  {showOutput && OUTPUT.map((line, i) => (
+                  {OUTPUT.map((line, i) => (
                     <div key={i} className="login-code-line"
-                      style={{ animationDelay: `${i * 0.1}s`, minHeight: line ? undefined : '0.9em' }}>
+                      style={{ animationDelay: `${OUTPUT_DELAY_MS / 1000 + i * 0.1}s`, minHeight: line ? undefined : '0.9em' }}>
                       {line || ' '}
                     </div>
                   ))}
