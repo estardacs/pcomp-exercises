@@ -117,6 +117,22 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Login — floating organic blobs (right panel background) */
+@keyframes floatBlobA {
+  0%, 100% { transform: translate(0px,  0px)   scale(1);    border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%; }
+  33%       { transform: translate(22px, -18px) scale(1.06); border-radius: 40% 60% 30% 70% / 60% 40% 55% 45%; }
+  66%       { transform: translate(-12px, 14px) scale(0.96); border-radius: 70% 30% 50% 50% / 35% 65% 60% 40%; }
+}
+@keyframes floatBlobB {
+  0%, 100% { transform: translate(0px,   0px)   scale(1);    border-radius: 50% 50% 40% 60% / 60% 40% 70% 30%; }
+  40%       { transform: translate(-18px, 14px) scale(1.05); border-radius: 30% 70% 60% 40% / 50% 60% 30% 70%; }
+  70%       { transform: translate(12px, -10px) scale(0.97); border-radius: 65% 35% 45% 55% / 40% 60% 50% 50%; }
+}
+@keyframes floatBlobC {
+  0%, 100% { transform: translate(0px, 0px)   scale(1);    border-radius: 55% 45% 60% 40% / 45% 55% 40% 60%; }
+  50%       { transform: translate(10px, 18px) scale(1.09); border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; }
+}
+
 /* Login landing page animations */
 @keyframes pulseGlow {
   0%, 100% { opacity: 0.18; transform: scale(1); }

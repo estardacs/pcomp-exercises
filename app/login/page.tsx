@@ -180,6 +180,41 @@ export default function LoginPage() {
           backgroundSize: '22px 22px',
         }} />
 
+        {/* Blob A — top-right, blue */}
+        <div className="absolute pointer-events-none" style={{
+          top: '-80px', right: '-80px',
+          width: '420px', height: '420px',
+          background: 'radial-gradient(circle, #3B82F6 0%, #60A5FA 45%, transparent 72%)',
+          filter: 'blur(62px)',
+          opacity: 0.18,
+          willChange: 'transform',
+          animation: 'floatBlobA 20s ease-in-out infinite',
+        }} />
+
+        {/* Blob B — bottom-left, violet */}
+        <div className="absolute pointer-events-none" style={{
+          bottom: '-70px', left: '-70px',
+          width: '340px', height: '340px',
+          background: 'radial-gradient(circle, #6366f1 0%, #a78bfa 50%, transparent 74%)',
+          filter: 'blur(55px)',
+          opacity: 0.13,
+          willChange: 'transform',
+          animation: 'floatBlobB 16s ease-in-out infinite',
+          animationDelay: '1.5s',
+        }} />
+
+        {/* Blob C — center, lighter blue accent */}
+        <div className="absolute pointer-events-none" style={{
+          top: '38%', right: '4%',
+          width: '220px', height: '220px',
+          background: 'radial-gradient(circle, #93c5fd 0%, transparent 70%)',
+          filter: 'blur(45px)',
+          opacity: 0.11,
+          willChange: 'transform',
+          animation: 'floatBlobC 13s ease-in-out infinite',
+          animationDelay: '3s',
+        }} />
+
         {/* Mobile header */}
         <div className="lg:hidden relative z-10 mb-8 text-center login-drift"
           style={{ animationDelay: '0.1s' }}>
