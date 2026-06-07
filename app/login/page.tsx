@@ -172,7 +172,7 @@ export default function LoginPage() {
 
       {/* ══ PANEL DERECHO ══ */}
       <div className="flex-1 flex flex-col items-center justify-center relative overflow-hidden px-10"
-        style={{ background: '#EFF3F9' }}>
+        style={{ background: '#ffffff' }}>
 
         {/* Subtle dot texture */}
         <div className="absolute inset-0 pointer-events-none" style={{
@@ -182,37 +182,37 @@ export default function LoginPage() {
 
         {/* Blob A — top-right, blue */}
         <div className="absolute pointer-events-none" style={{
-          top: '-80px', right: '-80px',
-          width: '420px', height: '420px',
-          background: 'radial-gradient(circle, #3B82F6 0%, #60A5FA 45%, transparent 72%)',
-          filter: 'blur(62px)',
-          opacity: 0.18,
+          top: '-100px', right: '-100px',
+          width: '480px', height: '480px',
+          background: '#3B82F6',
+          filter: 'blur(80px)',
+          opacity: 0.22,
           willChange: 'transform',
           animation: 'floatBlobA 20s ease-in-out infinite',
         }} />
 
         {/* Blob B — bottom-left, violet */}
         <div className="absolute pointer-events-none" style={{
-          bottom: '-70px', left: '-70px',
-          width: '340px', height: '340px',
-          background: 'radial-gradient(circle, #6366f1 0%, #a78bfa 50%, transparent 74%)',
-          filter: 'blur(55px)',
-          opacity: 0.13,
+          bottom: '-90px', left: '-90px',
+          width: '380px', height: '380px',
+          background: '#818cf8',
+          filter: 'blur(70px)',
+          opacity: 0.18,
           willChange: 'transform',
           animation: 'floatBlobB 16s ease-in-out infinite',
-          animationDelay: '1.5s',
+          animationDelay: '-4s',
         }} />
 
-        {/* Blob C — center, lighter blue accent */}
+        {/* Blob C — center accent */}
         <div className="absolute pointer-events-none" style={{
-          top: '38%', right: '4%',
-          width: '220px', height: '220px',
-          background: 'radial-gradient(circle, #93c5fd 0%, transparent 70%)',
-          filter: 'blur(45px)',
-          opacity: 0.11,
+          top: '35%', right: '2%',
+          width: '260px', height: '260px',
+          background: '#60A5FA',
+          filter: 'blur(55px)',
+          opacity: 0.14,
           willChange: 'transform',
           animation: 'floatBlobC 13s ease-in-out infinite',
-          animationDelay: '3s',
+          animationDelay: '-7s',
         }} />
 
         {/* Mobile header */}
