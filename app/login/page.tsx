@@ -89,10 +89,6 @@ export default function LoginPage() {
 
             {/* Heading */}
             <div>
-              <div className="login-drift text-blue-300/60 text-[11px] font-mono tracking-[0.3em] mb-5 uppercase"
-                style={{ animationDelay: '0.1s' }}>
-                DNO1063 · Diseño · UC
-              </div>
               <h1 className="login-drift text-white leading-[1.05] font-bold tracking-tight"
                 style={{ fontSize: '3.75rem', animationDelay: '0.2s' }}>
                 Pensamiento<br />
