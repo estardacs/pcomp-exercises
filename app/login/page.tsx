@@ -258,14 +258,14 @@ export default function LoginPage() {
                 Dev — bypass CAS
               </p>
               <form
-                onSubmit={e => { e.preventDefault(); window.location.href = `/api/auth/dev-login?username=${encodeURIComponent(devUser)}` }}
+                onSubmit={e => { e.preventDefault(); window.location.href = `/api/auth/dev-login?email=${encodeURIComponent(devUser)}` }}
                 className="flex gap-2"
               >
                 <input
-                  type="text"
+                  type="email"
                   value={devUser}
                   onChange={e => setDevUser(e.target.value)}
-                  placeholder="usuario UC (ej: mmanzur)"
+                  placeholder="email UC (ej: mmanzur@uc.cl)"
                   className="flex-1 border border-amber-200 rounded-xl px-3 py-2 text-sm bg-amber-50/50 placeholder:text-amber-300 focus:outline-none focus:ring-1 focus:ring-amber-300"
                 />
                 <button

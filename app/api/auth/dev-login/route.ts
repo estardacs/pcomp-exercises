@@ -9,22 +9,17 @@ export async function GET(request: NextRequest) {
   }
 
   const { searchParams, origin } = new URL(request.url)
-  const username = searchParams.get('username')?.toLowerCase().trim()
+  const email = searchParams.get('email')?.toLowerCase().trim()
 
-  if (!username) {
+  if (!email) {
     return NextResponse.redirect(`${origin}/login?error=cas_no_user`)
   }
 
   const admin = createServiceClient()
 
-  const { data: existingEmail } = await admin.rpc('find_uc_email', { p_username: username })
-  if (!existingEmail) {
-    return NextResponse.redirect(`${origin}/login?error=not_enrolled`)
-  }
-
   const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
     type: 'magiclink',
-    email: existingEmail as string,
+    email,
     options: { redirectTo: `${origin}/auth/callback` },
   })
 
