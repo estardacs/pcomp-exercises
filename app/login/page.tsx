@@ -28,7 +28,6 @@ const CODE: Tok[][] = [
   [['tx', '']],
   [['tx', 'ramo       '], ['tx', '= '], ['st', '"Pensamiento Computacional"']],
   [['tx', 'codigo     '], ['tx', '= '], ['st', '"DNO1063"']],
-  [['tx', 'semestre   '], ['tx', '= '], ['st', '"2026-A"']],
   [['tx', '']],
   [['tx', 'ejercicios '], ['tx', '= '], ['tx', '['],
     ['st', '"Datos"'], ['tx', ', '], ['st', '"Loops"'], ['tx', ', '],
@@ -92,7 +91,7 @@ export default function LoginPage() {
             <div>
               <div className="login-drift text-blue-300/60 text-[11px] font-mono tracking-[0.3em] mb-5 uppercase"
                 style={{ animationDelay: '0.1s' }}>
-                DNO1063 · Semestre 2026-A
+                DNO1063 · Diseño · UC
               </div>
               <h1 className="login-drift text-white leading-[1.05] font-bold tracking-tight"
                 style={{ fontSize: '3.75rem', animationDelay: '0.2s' }}>
@@ -216,7 +215,7 @@ export default function LoginPage() {
         <div className="lg:hidden relative z-10 mb-8 text-center login-drift"
           style={{ animationDelay: '0.1s' }}>
           <h1 className="text-2xl font-bold text-gray-900">Pensamiento Computacional</h1>
-          <p className="text-gray-500 text-sm mt-1">DNO1063 · 2026-A · Diseño · UC</p>
+          <p className="text-gray-500 text-sm mt-1">DNO1063 · Diseño · UC</p>
         </div>
 
         {/* Card */}
@@ -229,7 +228,7 @@ export default function LoginPage() {
           }}>
 
           <p className="text-[11px] font-mono text-gray-400 tracking-wider uppercase mb-3">
-            DNO1063 · 2026-A · Diseño · UC
+            DNO1063 · Diseño · UC
           </p>
           <h2 className="text-[1.75rem] font-bold text-gray-900 leading-tight mb-2">
             Ingresar al curso
