@@ -12,13 +12,13 @@ const ERROR_MESSAGES: Record<string, string> = {
   not_enrolled:   'Tu cuenta UC no esta inscrita en este curso.',
 }
 
-// Token colors for Python syntax highlight
 const C = {
-  kw: '#a78bfa',                  // violet  — keywords
-  fn: '#60a5fa',                  // blue    — functions
-  st: '#34d399',                  // emerald — strings
-  cm: '#6b7280',                  // gray    — comments
-  tx: 'rgba(255,255,255,0.78)',   // white   — plain text
+  kw: '#a78bfa',
+  fn: '#60a5fa',
+  st: '#34d399',
+  cm: '#6b7280',
+  nu: '#fb923c',
+  tx: 'rgba(255,255,255,0.78)',
 } as const
 type T = keyof typeof C
 type Tok = [T, string]
@@ -26,219 +26,241 @@ type Tok = [T, string]
 const CODE: Tok[][] = [
   [['cm', '# bienvenido.py']],
   [['tx', '']],
-  [['tx', 'ramo     '], ['tx', '= '], ['st', '"Pensamiento Computacional"']],
-  [['tx', 'codigo   '], ['tx', '= '], ['st', '"DNO1063"']],
-  [['tx', 'semestre '], ['tx', '= '], ['st', '"2026-A"']],
-  [['tx', 'facultad '], ['tx', '= '], ['st', '"Diseño · UC"']],
+  [['tx', 'ramo       '], ['tx', '= '], ['st', '"Pensamiento Computacional"']],
+  [['tx', 'codigo     '], ['tx', '= '], ['st', '"DNO1063"']],
+  [['tx', 'semestre   '], ['tx', '= '], ['st', '"2026-A"']],
   [['tx', '']],
-  [['fn', 'print'], ['tx', '('], ['st', '"Ramo:"'],     ['tx', ', ramo)']],
-  [['fn', 'print'], ['tx', '('], ['st', '"Codigo:"'],   ['tx', ', codigo)']],
-  [['fn', 'print'], ['tx', '('], ['st', '"Semestre:"'], ['tx', ', semestre)']],
-  [['fn', 'print'], ['tx', '('], ['st', '"Facultad:"'], ['tx', ', facultad)']],
+  [['tx', 'ejercicios '], ['tx', '= '], ['tx', '['],
+    ['st', '"Datos"'], ['tx', ', '], ['st', '"Loops"'], ['tx', ', '],
+    ['st', '"Funciones"'], ['tx', ', '], ['st', '"Visualizacion"'], ['tx', ']']],
+  [['tx', '']],
+  [['kw', 'for '], ['tx', 'i, ej '], ['kw', 'in '], ['fn', 'enumerate'], ['tx', '(ejercicios, '], ['nu', '1'], ['tx', '):']],
+  [['tx', '    '], ['fn', 'print'], ['tx', '('], ['st', 'f"  Ejercicio {i}: {ej}"'], ['tx', ')']],
+  [['tx', '']],
+  [['fn', 'print'], ['tx', '('], ['st', 'f"\\nBienvenido a {ramo}!"'], ['tx', ')']],
 ]
+
+const OUTPUT = [
+  '  Ejercicio 1: Datos',
+  '  Ejercicio 2: Loops',
+  '  Ejercicio 3: Funciones',
+  '  Ejercicio 4: Visualizacion',
+  '',
+  'Bienvenido a Pensamiento Computacional!',
+]
+
+// code finishes animating at: 0.6 + 11*0.07 + 0.3 ≈ 1.67s → show output at 1800ms
+const OUTPUT_DELAY_MS = 1800
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
+  const [showOutput, setShowOutput] = useState(false)
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('error')
     if (code) setError(ERROR_MESSAGES[code] ?? `Error inesperado: ${code}`)
+    const t = setTimeout(() => setShowOutput(true), OUTPUT_DELAY_MS)
+    return () => clearTimeout(t)
   }, [])
 
   return (
     <div className="flex h-screen overflow-hidden font-sans">
 
-      {/* ══════════════════════════════════════
-          PANEL IZQUIERDO — branding oscuro
-          ══════════════════════════════════════ */}
+      {/* ══ PANEL IZQUIERDO ══ */}
       <div
         className="hidden lg:flex lg:w-[60%] relative flex-col overflow-hidden"
         style={{ background: 'linear-gradient(145deg, #060f20 0%, #0d1f3c 35%, #142f58 65%, #1B4B8A 100%)' }}
       >
-        {/* Dot grid */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 1.5px, transparent 1.5px)',
-            backgroundSize: '28px 28px',
-          }}
-        />
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 1.5px, transparent 1.5px)',
+          backgroundSize: '28px 28px',
+        }} />
+        <div className="login-glow absolute pointer-events-none" style={{
+          top: '40%', left: '50%', width: '520px', height: '520px',
+          transform: 'translate(-50%, -50%)', borderRadius: '50%',
+          background: 'radial-gradient(circle, #3B82F6 0%, transparent 68%)',
+          filter: 'blur(72px)',
+        }} />
+        <div className="absolute pointer-events-none" style={{
+          top: '-8%', right: '-6%', width: '360px', height: '360px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, #818cf8 0%, transparent 70%)',
+          filter: 'blur(90px)', opacity: 0.1,
+        }} />
 
-        {/* Glow central */}
-        <div
-          className="login-glow absolute pointer-events-none"
-          style={{
-            top: '40%', left: '50%',
-            width: '520px', height: '520px',
-            transform: 'translate(-50%, -50%)',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, #3B82F6 0%, transparent 68%)',
-            filter: 'blur(72px)',
-          }}
-        />
-
-        {/* Glow acento esquina superior derecha */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: '-8%', right: '-6%',
-            width: '360px', height: '360px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, #818cf8 0%, transparent 70%)',
-            filter: 'blur(90px)',
-            opacity: 0.1,
-          }}
-        />
-
-        {/* Contenido */}
         <div className="relative z-10 flex flex-col h-full px-14 py-11">
+          <div className="flex-1 flex flex-col justify-start pt-14 gap-8">
 
-          {/* Texto principal */}
-          <div className="flex-1 flex flex-col justify-start pt-16 gap-9 max-w-[500px]">
+            {/* Heading */}
             <div>
-              <div
-                className="login-drift text-blue-300/60 text-[11px] font-mono tracking-[0.3em] mb-5 uppercase"
-                style={{ animationDelay: '0.1s' }}
-              >
+              <div className="login-drift text-blue-300/60 text-[11px] font-mono tracking-[0.3em] mb-5 uppercase"
+                style={{ animationDelay: '0.1s' }}>
                 DNO1063 · Semestre 2026-A
               </div>
-
-              <h1
-                className="login-drift text-white leading-[1.05] font-bold tracking-tight"
-                style={{ fontSize: '3.75rem', animationDelay: '0.2s' }}
-              >
+              <h1 className="login-drift text-white leading-[1.05] font-bold tracking-tight"
+                style={{ fontSize: '3.75rem', animationDelay: '0.2s' }}>
                 Pensamiento<br />
                 <span style={{
                   backgroundImage: 'linear-gradient(95deg, #60A5FA 0%, #818cf8 50%, #a78bfa 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}>
-                  Computacional
-                </span>
+                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                }}>Computacional</span>
               </h1>
-
-              <p
-                className="login-drift text-white/50 mt-5 text-[15px] leading-relaxed"
-                style={{ animationDelay: '0.3s' }}
-              >
+              <p className="login-drift text-white/50 mt-5 text-[15px] leading-relaxed"
+                style={{ animationDelay: '0.3s' }}>
                 Sube tus ejercicios y revisa tus notas en linea.
               </p>
             </div>
 
-            {/* Terminal con código Python */}
-            <div
-              className="login-drift rounded-2xl overflow-hidden"
-              style={{
-                background: 'rgba(0,0,0,0.42)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                backdropFilter: 'blur(14px)',
-                animationDelay: '0.4s',
-              }}
-            >
-              {/* Barra de la terminal */}
-              <div
-                className="flex items-center gap-2 px-4 py-3"
-                style={{ background: 'rgba(0,0,0,0.28)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}
-              >
+            {/* Terminal */}
+            <div className="login-drift rounded-2xl overflow-hidden w-full" style={{
+              background: 'rgba(0,0,0,0.42)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(14px)',
+              animationDelay: '0.4s',
+            }}>
+              {/* Title bar */}
+              <div className="flex items-center gap-2 px-4 py-3" style={{
+                background: 'rgba(0,0,0,0.28)',
+                borderBottom: '1px solid rgba(255,255,255,0.07)',
+              }}>
                 <div className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }} />
                 <div className="w-3 h-3 rounded-full" style={{ background: '#febc2e' }} />
                 <div className="w-3 h-3 rounded-full" style={{ background: '#28c840' }} />
                 <span className="ml-3 text-white/25 text-xs font-mono">bienvenido.py</span>
+                <span className="ml-auto text-white/20 text-[10px] font-mono tracking-wide">Python 3.11</span>
               </div>
 
-              {/* Líneas de código con stagger */}
-              <div className="px-6 py-6 font-mono text-[14px] leading-[1.9]">
+              {/* Code lines with line numbers */}
+              <div className="py-5 font-mono text-[13.5px] leading-[1.9]">
                 {CODE.map((line, i) => (
-                  <div
-                    key={i}
-                    className="login-code-line"
-                    style={{ animationDelay: `${0.6 + i * 0.08}s`, minHeight: '1.85em' }}
-                  >
-                    {line.map(([type, str], j) => (
-                      <span key={j} style={{ color: C[type] }}>{str}</span>
-                    ))}
+                  <div key={i} className="login-code-line flex items-baseline"
+                    style={{ animationDelay: `${0.6 + i * 0.07}s`, minHeight: '1.9em' }}>
+                    <span className="w-10 text-right pr-5 select-none shrink-0 text-[11px]"
+                      style={{ color: 'rgba(255,255,255,0.13)' }}>{i + 1}</span>
+                    <span>
+                      {line.map(([type, str], j) => (
+                        <span key={j} style={{ color: C[type] }}>{str}</span>
+                      ))}
+                    </span>
                   </div>
                 ))}
               </div>
+
+              {/* Output section — appears after code finishes */}
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.18)' }}>
+                <div className="flex items-center gap-2 px-4 py-2.5">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#28c840', opacity: 0.65 }} />
+                  <span className="text-[10px] font-mono tracking-[0.2em] uppercase"
+                    style={{ color: 'rgba(255,255,255,0.22)' }}>Output</span>
+                </div>
+                <div className="px-5 pb-5 font-mono text-[12.5px] leading-[1.8]"
+                  style={{ color: 'rgba(255,255,255,0.38)', minHeight: '6rem' }}>
+                  {showOutput && OUTPUT.map((line, i) => (
+                    <div key={i} className="login-code-line"
+                      style={{ animationDelay: `${i * 0.1}s`, minHeight: line ? undefined : '0.9em' }}>
+                      {line || ' '}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
+
           </div>
 
-          {/* Pie de página */}
-          <div
-            className="login-drift"
-            style={{ animationDelay: '0.5s' }}
-          >
+          <div className="login-drift" style={{ animationDelay: '0.5s' }}>
             <span className="text-white/20 text-xs">Facultad de Arquitectura, Diseño y Estudios Urbanos</span>
           </div>
         </div>
       </div>
 
-      {/* ══════════════════════════════════════
-          PANEL DERECHO — login
-          ══════════════════════════════════════ */}
-      <div
-        className="flex-1 flex flex-col items-center justify-center px-14"
-        style={{ background: '#EEF2F8' }}
-      >
-        {/* Header solo mobile */}
-        <div className="lg:hidden mb-10 text-center login-drift" style={{ animationDelay: '0.1s' }}>
-          <div
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-4"
-            style={{ background: 'rgba(27,75,138,0.1)', border: '1px solid rgba(27,75,138,0.2)' }}
-          >
-            <span className="text-[#1B4B8A] font-bold text-sm tracking-wider">UC</span>
-            <span className="text-[#1B4B8A]/30">·</span>
-            <span className="text-[#1B4B8A]/70 text-sm">DNO1063</span>
-          </div>
+      {/* ══ PANEL DERECHO ══ */}
+      <div className="flex-1 flex flex-col relative overflow-hidden" style={{ background: '#ffffff' }}>
+
+        {/* Left accent stripe */}
+        <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{
+          background: 'linear-gradient(180deg, transparent 5%, #1B4B8A 30%, #3B82F6 60%, transparent 95%)',
+          opacity: 0.28,
+        }} />
+
+        {/* Subtle dot texture */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'radial-gradient(circle, rgba(27,75,138,0.04) 1px, transparent 1px)',
+          backgroundSize: '22px 22px',
+        }} />
+
+        {/* Mobile header */}
+        <div className="lg:hidden relative z-10 px-8 pt-12 pb-8 text-center login-drift"
+          style={{ animationDelay: '0.1s' }}>
           <h1 className="text-2xl font-bold text-gray-900">Pensamiento Computacional</h1>
-          <p className="text-gray-500 text-sm mt-1">Semestre 2026-A</p>
+          <p className="text-gray-500 text-sm mt-1">DNO1063 · 2026-A · Diseño · UC</p>
         </div>
 
-        {/* Contenido del login — sin card, usa todo el ancho disponible */}
-        <div className="w-full max-w-[440px] login-drift" style={{ animationDelay: '0.25s' }}>
+        {/* Main content */}
+        <div className="relative z-10 flex flex-col h-full px-12 py-12">
+          <div className="flex-1 flex flex-col justify-center">
+            <div className="login-drift w-full max-w-[420px]" style={{ animationDelay: '0.25s' }}>
 
-          {/* Metadata del ramo */}
-          <p className="text-[11px] font-mono text-gray-400 tracking-wider uppercase mb-3">
-            DNO1063 · 2026-A · Diseño · UC
-          </p>
+              <p className="text-[11px] font-mono text-gray-400 tracking-wider uppercase mb-3">
+                DNO1063 · 2026-A · Diseño · UC
+              </p>
+              <h2 className="text-[1.75rem] font-bold text-gray-900 leading-tight mb-2">
+                Ingresar al curso
+              </h2>
+              <p className="text-gray-500 text-[15px] mb-8 leading-relaxed">
+                Usa tu cuenta UC para acceder a la plataforma.
+              </p>
 
-          <h2 className="text-[1.75rem] font-bold text-gray-900 leading-tight mb-2">
-            Ingresar al curso
-          </h2>
-          <p className="text-gray-500 text-[15px] mb-10 leading-relaxed">
-            Usa tu cuenta UC para acceder a la plataforma.
-          </p>
+              {error && (
+                <div className="mb-6 px-4 py-3.5 rounded-2xl text-sm text-red-700 leading-snug"
+                  style={{ background: '#FEF2F2', border: '1px solid #FCA5A5' }}>
+                  {error}
+                </div>
+              )}
 
-          {error && (
-            <div
-              className="mb-6 px-4 py-3.5 rounded-2xl text-sm text-red-700 leading-snug"
-              style={{ background: '#FEF2F2', border: '1px solid #FCA5A5' }}
-            >
-              {error}
+              <a href="/api/auth/cas/login" className="block">
+                <button
+                  className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-150 active:scale-[0.98] hover:opacity-95"
+                  style={{
+                    background: 'linear-gradient(135deg, #1B4B8A 0%, #1e5dab 50%, #2563EB 100%)',
+                    boxShadow: '0 4px 20px rgba(27,75,138,0.38), 0 1px 4px rgba(27,75,138,0.25)',
+                  }}
+                  type="button"
+                >
+                  <span className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
+                    style={{ background: 'rgba(255,255,255,0.2)' }}>
+                    UC
+                  </span>
+                  Ingresar con cuenta UC
+                </button>
+              </a>
+
+              {/* Feature list */}
+              <div className="mt-10 pt-8 space-y-5" style={{ borderTop: '1px solid #f0f0f0' }}>
+                {[
+                  { num: '01', label: 'Sube tus ejercicios', sub: 'Notebooks .ipynb o scripts .py desde tu computador' },
+                  { num: '02', label: 'Recibe feedback detallado', sub: 'Resultados pregunta a pregunta con puntaje' },
+                  { num: '03', label: 'Sigue tu progreso', sub: 'Notas y estado de cada ejercicio del semestre' },
+                ].map(item => (
+                  <div key={item.num} className="flex items-start gap-4">
+                    <span className="font-mono text-[11px] tabular-nums shrink-0 mt-0.5"
+                      style={{ color: 'rgba(27,75,138,0.45)' }}>{item.num}</span>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-700 leading-tight">{item.label}</p>
+                      <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{item.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
             </div>
-          )}
+          </div>
 
-          <a href="/api/auth/cas/login" className="block">
-            <button
-              className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl font-semibold text-white text-base transition-all duration-150 active:scale-[0.98] hover:opacity-95"
-              style={{
-                background: 'linear-gradient(135deg, #1B4B8A 0%, #1e5dab 50%, #2563EB 100%)',
-                boxShadow: '0 4px 20px rgba(27,75,138,0.38), 0 1px 4px rgba(27,75,138,0.25)',
-              }}
-              type="button"
-            >
-              <span
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold shrink-0"
-                style={{ background: 'rgba(255,255,255,0.2)' }}
-              >
-                UC
-              </span>
-              Ingresar con cuenta UC
-            </button>
-          </a>
+          <div className="login-drift" style={{ animationDelay: '0.6s' }}>
+            <p className="text-xs text-gray-300">Facultad de Arquitectura, Diseño y Estudios Urbanos · UC</p>
+          </div>
         </div>
       </div>
+
     </div>
   )
 }
