@@ -182,37 +182,37 @@ export default function LoginPage() {
 
         {/* Blob A — top-right, blue */}
         <div className="absolute pointer-events-none" style={{
-          top: '-100px', right: '-100px',
-          width: '480px', height: '480px',
+          top: '-80px', right: '-80px',
+          width: '500px', height: '500px',
           background: '#3B82F6',
-          filter: 'blur(80px)',
-          opacity: 0.22,
+          filter: 'blur(55px)',
+          opacity: 0.38,
           willChange: 'transform',
-          animation: 'floatBlobA 20s ease-in-out infinite',
+          animation: 'floatBlobA 14s ease-in-out infinite',
         }} />
 
         {/* Blob B — bottom-left, violet */}
         <div className="absolute pointer-events-none" style={{
-          bottom: '-90px', left: '-90px',
-          width: '380px', height: '380px',
+          bottom: '-80px', left: '-80px',
+          width: '420px', height: '420px',
           background: '#818cf8',
-          filter: 'blur(70px)',
-          opacity: 0.18,
+          filter: 'blur(50px)',
+          opacity: 0.30,
           willChange: 'transform',
-          animation: 'floatBlobB 16s ease-in-out infinite',
+          animation: 'floatBlobB 11s ease-in-out infinite',
           animationDelay: '-4s',
         }} />
 
         {/* Blob C — center accent */}
         <div className="absolute pointer-events-none" style={{
-          top: '35%', right: '2%',
-          width: '260px', height: '260px',
+          top: '32%', right: '0%',
+          width: '280px', height: '280px',
           background: '#60A5FA',
-          filter: 'blur(55px)',
-          opacity: 0.14,
+          filter: 'blur(40px)',
+          opacity: 0.22,
           willChange: 'transform',
-          animation: 'floatBlobC 13s ease-in-out infinite',
-          animationDelay: '-7s',
+          animation: 'floatBlobC 9s ease-in-out infinite',
+          animationDelay: '-3s',
         }} />
 
         {/* Mobile header */}
