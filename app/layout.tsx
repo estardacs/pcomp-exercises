@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Corrector DNO1063",
-  description: "Plataforma de corrección de tareas Pensamiento Computacional",
+  title: "DNO1063 · Pensamiento Computacional",
+  description: "Plataforma de gestión de cursos Pensamiento Computacional",
 };
 
 export default function RootLayout({
