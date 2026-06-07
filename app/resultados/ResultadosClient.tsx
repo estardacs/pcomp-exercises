@@ -74,33 +74,20 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
     return [{ id: ex.id, title: ex.title, total_points: ex.total_points, avgNota: avgN, pctAprob, worstQ, worstPct, count: exSubs.length }]
   })
 
-  function exportCSV() {
-    const rows = [
-      ['Apellido', 'Nombre', 'RUT', 'Ejercicio', 'Puntaje', 'Max', 'Nota', 'Estado', 'Ayudante', 'Comentario']
-        .join(','),
-      ...filtered.map(s => {
-        const ex = exercises.find(e => e.id === s.exercise_id)
-        const assignee = profiles.find(p => p.id === s.assigned_to)
-        const nota = s.total_score != null
-          ? formatNotaChilena(scoreToNota(s.total_score, ex?.total_points ?? 6))
-          : ''
-        return [
-          s.student_apellido, s.student_nombre, s.student_rut.toUpperCase(),
-          s.exercise_id, s.total_score ?? '', ex?.total_points ?? '',
-          nota, s.status, assignee?.name ?? '', `"${(s.general_comment ?? '').replace(/"/g, '""')}"`
-        ].join(',')
-      })
-    ].join('\n')
-    const blob = new Blob([rows], { type: 'text/csv' })
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob)
-    a.download = `notas_${filterEx === 'all' ? 'todos' : filterEx}.csv`; a.click()
+  function exportExcel() {
+    const params = new URLSearchParams({
+      ex: filterEx,
+      status: filterStatus,
+      ...(search ? { q: search } : {}),
+    })
+    window.location.href = `/api/resultados/export?${params}`
   }
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-8 space-y-6 animate-in fade-in-0 duration-200">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold">Resultados</h1>
-          <Button size="sm" onClick={exportCSV}>Exportar CSV</Button>
+          <Button size="sm" onClick={exportExcel}>Exportar Excel</Button>
         </div>
 
         {/* Summary cards */}
