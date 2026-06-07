@@ -167,9 +167,6 @@ export default function LoginPage() {
 
           </div>
 
-          <div className="login-drift" style={{ animationDelay: '0.5s' }}>
-            <span className="text-white/20 text-xs">Facultad de Arquitectura, Diseño y Estudios Urbanos</span>
-          </div>
         </div>
       </div>
 
@@ -191,7 +188,7 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="relative z-10 login-drift w-full max-w-[400px] rounded-3xl px-10 py-10"
+        <div className="relative z-10 login-drift w-full max-w-[460px] rounded-3xl px-12 py-14"
           style={{
             background: '#ffffff',
             border: '1px solid rgba(0,0,0,0.07)',
