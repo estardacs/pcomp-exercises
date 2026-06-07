@@ -10,6 +10,7 @@ interface NavItem {
 const NAV: NavItem[] = [
   { href: '/subir', label: 'Subir tareas' },
   { href: '/asignaciones', label: 'Asignaciones' },
+  { href: '/corregir', label: 'Corregir' },
   { href: '/pauta', label: 'Pautas' },
   { href: '/resultados', label: 'Resultados' },
   { href: '/notas', label: 'Notas curso' },

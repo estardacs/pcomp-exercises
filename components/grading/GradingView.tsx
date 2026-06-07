@@ -278,6 +278,9 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
             >
               {currentSub.filename}
             </span>
+            <span className="text-xs text-gray-400 shrink-0">
+              · {new Date(currentSub.uploaded_at).toLocaleString('es-CL', { dateStyle: 'short', timeStyle: 'short' })}
+            </span>
             <span className="text-xs text-gray-400 shrink-0">({currentIdx + 1}/{submissions.length})</span>
             {emptyCount > 0 && (
               <Badge variant="destructive" className="text-xs">⚠ {emptyCount} sin respuesta</Badge>

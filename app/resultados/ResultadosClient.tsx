@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import type { Submission, QuestionGrade } from '@/types/database'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { scoreToNota, formatNotaChilena } from '@/lib/grade-converter'
 
 interface Props {
   submissions: Submission[]
@@ -29,20 +30,31 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
     })
   }, [submissions, filterEx, filterStatus, search])
 
-  // Stats
+  // Stats — only graded submissions
   const total = submissions.length
   const done = submissions.filter(s => s.status === 'done').length
-  const avgScore = done > 0
-    ? submissions.filter(s => s.total_score != null).reduce((sum, s) => sum + (s.total_score ?? 0), 0) / done
-    : 0
+  const gradedSubs = submissions.filter(s => s.status === 'done' && s.total_score != null)
+  const notas = gradedSubs.map(s => {
+    const ex = exercises.find(e => e.id === s.exercise_id)
+    return scoreToNota(s.total_score ?? 0, ex?.total_points ?? 6)
+  })
+  const avgNota = notas.length > 0 ? notas.reduce((a, b) => a + b, 0) / notas.length : null
+  const pctAprobados = notas.length > 0
+    ? Math.round((notas.filter(n => n >= 4).length / notas.length) * 100)
+    : null
 
-  // Per-exercise averages
-  const exStats = exercises.map(ex => {
-    const exSubs = submissions.filter(s => s.exercise_id === ex.id && s.total_score != null)
-    const avg = exSubs.length > 0
-      ? exSubs.reduce((s, sub) => s + (sub.total_score ?? 0), 0) / exSubs.length
-      : null
-    // Worst question
+  interface ExStat {
+    id: string; title: string; total_points: number
+    avgNota: number; pctAprob: number; worstQ: number | null; worstPct: number; count: number
+  }
+
+  // Per-exercise averages (nota scale)
+  const exStats: ExStat[] = exercises.flatMap(ex => {
+    const exSubs = submissions.filter(s => s.exercise_id === ex.id && s.status === 'done' && s.total_score != null)
+    if (exSubs.length === 0) return []
+    const exNotas = exSubs.map(s => scoreToNota(s.total_score ?? 0, ex.total_points || 6))
+    const avgN = exNotas.reduce((a, b) => a + b, 0) / exNotas.length
+    const pctAprob = Math.round((exNotas.filter(n => n >= 4).length / exNotas.length) * 100)
     const exGrades = grades.filter(g =>
       submissions.find(s => s.id === g.submission_id && s.exercise_id === ex.id)
     )
@@ -53,26 +65,29 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
         byQ[g.question_n].push(g.score / g.max_points)
       }
     })
-    let worstQ = null
+    let worstQ: number | null = null
     let worstPct = 1
     Object.entries(byQ).forEach(([qn, scores]) => {
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length
       if (avg < worstPct) { worstPct = avg; worstQ = parseInt(qn) }
     })
-    return { ...ex, avg, worstQ, worstPct }
-  }).filter(e => e.avg != null)
+    return [{ id: ex.id, title: ex.title, total_points: ex.total_points, avgNota: avgN, pctAprob, worstQ, worstPct, count: exSubs.length }]
+  })
 
   function exportCSV() {
     const rows = [
-      ['Apellido', 'Nombre', 'RUT', 'Ejercicio', 'Total', 'Max', 'Estado', 'Ayudante', 'Comentario']
+      ['Apellido', 'Nombre', 'RUT', 'Ejercicio', 'Puntaje', 'Max', 'Nota', 'Estado', 'Ayudante', 'Comentario']
         .join(','),
       ...filtered.map(s => {
         const ex = exercises.find(e => e.id === s.exercise_id)
         const assignee = profiles.find(p => p.id === s.assigned_to)
+        const nota = s.total_score != null
+          ? formatNotaChilena(scoreToNota(s.total_score, ex?.total_points ?? 6))
+          : ''
         return [
           s.student_apellido, s.student_nombre, s.student_rut.toUpperCase(),
           s.exercise_id, s.total_score ?? '', ex?.total_points ?? '',
-          s.status, assignee?.name ?? '', `"${(s.general_comment ?? '').replace(/"/g, '""')}"`
+          nota, s.status, assignee?.name ?? '', `"${(s.general_comment ?? '').replace(/"/g, '""')}"`
         ].join(',')
       })
     ].join('\n')
@@ -97,14 +112,20 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
           <div className="bg-white border rounded-lg p-4">
             <p className="text-xs text-gray-500">Revisados</p>
             <p className="text-2xl font-bold">{done}</p>
+            <p className="text-xs text-gray-400">{total > 0 ? Math.round((done / total) * 100) : 0}% del total</p>
           </div>
           <div className="bg-white border rounded-lg p-4">
-            <p className="text-xs text-gray-500">Promedio general</p>
-            <p className="text-2xl font-bold">{avgScore.toFixed(1)}</p>
+            <p className="text-xs text-gray-500">Nota promedio</p>
+            <p className={`text-2xl font-bold ${avgNota != null && avgNota >= 4 ? 'text-green-600' : avgNota != null ? 'text-red-600' : ''}`}>
+              {avgNota != null ? formatNotaChilena(avgNota) : '-'}
+            </p>
           </div>
           <div className="bg-white border rounded-lg p-4">
-            <p className="text-xs text-gray-500">% completado</p>
-            <p className="text-2xl font-bold">{total > 0 ? Math.round((done / total) * 100) : 0}%</p>
+            <p className="text-xs text-gray-500">Tasa aprobacion</p>
+            <p className={`text-2xl font-bold ${pctAprobados != null && pctAprobados >= 60 ? 'text-green-600' : pctAprobados != null ? 'text-amber-600' : ''}`}>
+              {pctAprobados != null ? `${pctAprobados}%` : '-'}
+            </p>
+            <p className="text-xs text-gray-400">nota &ge; 4,0</p>
           </div>
         </div>
 
@@ -117,8 +138,10 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
                 <thead className="bg-gray-50 text-xs text-gray-500 uppercase">
                   <tr>
                     <th className="px-4 py-2 text-left">Ejercicio</th>
-                    <th className="px-4 py-2 text-left">Promedio</th>
-                    <th className="px-4 py-2 text-left">Pregunta más baja</th>
+                    <th className="px-4 py-2 text-left">Nota prom.</th>
+                    <th className="px-4 py-2 text-left">% Aprobados</th>
+                    <th className="px-4 py-2 text-left">Revisados</th>
+                    <th className="px-4 py-2 text-left">Pregunta mas baja</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -126,12 +149,19 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
                     <tr key={ex.id}>
                       <td className="px-4 py-2 font-medium">{ex.id}: {ex.title}</td>
                       <td className="px-4 py-2">
-                        <span className="font-mono">{ex.avg?.toFixed(2)}</span>
-                        <span className="text-gray-400 text-xs"> / {ex.total_points}</span>
+                        <span className={`font-bold ${ex.avgNota >= 4 ? 'text-green-600' : 'text-red-600'}`}>
+                          {formatNotaChilena(ex.avgNota)}
+                        </span>
                       </td>
+                      <td className="px-4 py-2">
+                        <span className={ex.pctAprob >= 60 ? 'text-green-600' : 'text-amber-600'}>
+                          {ex.pctAprob}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-2 text-gray-500">{ex.count}</td>
                       <td className="px-4 py-2 text-xs text-gray-500">
                         {ex.worstQ != null
-                          ? `Q${ex.worstQ}: ${Math.round(ex.worstPct * 100)}% promedio`
+                          ? `P${ex.worstQ}: ${Math.round(ex.worstPct * 100)}%`
                           : '-'}
                       </td>
                     </tr>
@@ -185,6 +215,7 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
                   <th className="px-4 py-3 text-left">RUT</th>
                   <th className="px-4 py-3 text-left">Ejercicio</th>
                   <th className="px-4 py-3 text-left">Nota</th>
+                  <th className="px-4 py-3 text-left">Puntaje</th>
                   <th className="px-4 py-3 text-left">Estado</th>
                   <th className="px-4 py-3 text-left">Corrector</th>
                 </tr>
@@ -193,6 +224,9 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
                 {filtered.map(s => {
                   const ex = exercises.find(e => e.id === s.exercise_id)
                   const assignee = profiles.find(p => p.id === s.assigned_to)
+                  const nota = s.total_score != null
+                    ? scoreToNota(s.total_score, ex?.total_points ?? 6)
+                    : null
                   return (
                     <tr key={s.id} className="hover:bg-gray-50">
                       <td className="px-4 py-2 font-medium">
@@ -201,9 +235,14 @@ export default function ResultadosClient({ submissions, exercises, grades, profi
                       <td className="px-4 py-2 font-mono text-xs">{s.student_rut.toUpperCase()}</td>
                       <td className="px-4 py-2">{s.exercise_id}</td>
                       <td className="px-4 py-2">
-                        {s.total_score != null
-                          ? <span className="font-mono">{s.total_score}/{ex?.total_points ?? '?'}</span>
+                        {nota != null
+                          ? <span className={`font-bold ${nota >= 4 ? 'text-green-600' : 'text-red-600'}`}>
+                              {formatNotaChilena(nota)}
+                            </span>
                           : <span className="text-gray-300">-</span>}
+                      </td>
+                      <td className="px-4 py-2 font-mono text-xs text-gray-400">
+                        {s.total_score != null ? `${s.total_score}/${ex?.total_points ?? '?'}` : '-'}
                       </td>
                       <td className="px-4 py-2">
                         <Badge variant={
