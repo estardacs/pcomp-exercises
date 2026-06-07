@@ -53,10 +53,13 @@ const OUTPUT_DELAY_MS = 1800
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
+  const [isDev, setIsDev] = useState(false)
+  const [devUser, setDevUser] = useState('')
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('error')
     if (code) setError(ERROR_MESSAGES[code] ?? `Error inesperado: ${code}`)
+    setIsDev(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   }, [])
 
   return (
@@ -256,6 +259,32 @@ export default function LoginPage() {
               Ingresar con cuenta UC
             </button>
           </a>
+
+          {isDev && (
+            <div className="mt-6 pt-5 border-t border-dashed border-amber-300/60">
+              <p className="text-[10px] font-mono text-amber-500 uppercase tracking-widest mb-2">
+                Dev — bypass CAS
+              </p>
+              <form
+                onSubmit={e => { e.preventDefault(); window.location.href = `/api/auth/dev-login?username=${encodeURIComponent(devUser)}` }}
+                className="flex gap-2"
+              >
+                <input
+                  type="text"
+                  value={devUser}
+                  onChange={e => setDevUser(e.target.value)}
+                  placeholder="usuario UC (ej: mmanzur)"
+                  className="flex-1 border border-amber-200 rounded-xl px-3 py-2 text-sm bg-amber-50/50 placeholder:text-amber-300 focus:outline-none focus:ring-1 focus:ring-amber-300"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-amber-400 hover:bg-amber-500 transition-colors"
+                >
+                  Entrar
+                </button>
+              </form>
+            </div>
+          )}
 
         </div>
       </div>
