@@ -128,10 +128,13 @@ export default function GradingView({ submissions, exercise, initialStudentId, u
       { ...payload, score },
     ]
     const newTotal = newGrades.reduce((s, g) => s + (g.score ?? 0), 0)
-    await supabase
-      .from('submissions')
-      .update({ total_score: newTotal, status: 'in_progress' })
-      .eq('id', currentId)
+
+    // Always update total_score. Only transition to in_progress from pending/unassigned —
+    // never overwrite 'done' (handles both re-correction and markDone race conditions).
+    await Promise.all([
+      supabase.from('submissions').update({ total_score: newTotal }).eq('id', currentId),
+      supabase.from('submissions').update({ status: 'in_progress' }).eq('id', currentId).in('status', ['pending', 'unassigned']),
+    ])
 
     setSaving(false)
   }, [currentId, gradesMap, rubricQuestions, supabase, userId])
