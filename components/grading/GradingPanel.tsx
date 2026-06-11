@@ -73,7 +73,7 @@ export default function GradingPanel({
 
         return (
           <AnswerCard
-            key={rubQ.n}
+            key={`${currentSub.id}-${rubQ.n}`}
             rubricQuestion={rubQ}
             parsedQuestion={parsedQ ?? null}
             grade={grade ?? null}

@@ -219,7 +219,8 @@ export async function GET(request: NextRequest) {
   const h2 = ws2.addRow(['Ejercicio', 'Titulo', 'Nota prom.', '% Aprobados', 'Revisados', 'Pregunta mas baja'])
   styleHeader(h2, 6)
 
-  exercises.forEach((ex, idx) => {
+  let exRowIdx = 0
+  exercises.forEach((ex) => {
     const exSubs = allSubs.filter(s => s.exercise_id === ex.id && s.status === 'done' && s.total_score != null)
     if (exSubs.length === 0) return
 
@@ -244,7 +245,8 @@ export async function GET(request: NextRequest) {
     const bajaStr = worstQ != null ? `P${worstQ}: ${Math.round(worstPct * 100)}%` : '-'
 
     const row = ws2.addRow([ex.id, ex.title, avgN, pctAp / 100, exSubs.length, bajaStr])
-    styleDataRow(row, 6, idx % 2 === 0)
+    styleDataRow(row, 6, exRowIdx % 2 === 0)
+    exRowIdx++
 
     // Nota promedio color
     colorNota(row.getCell(3), avgN)
@@ -319,7 +321,7 @@ export async function GET(request: NextRequest) {
 
   const filename = `resultados_dno1063_${new Date().toISOString().slice(0, 10)}.xlsx`
 
-  return new NextResponse(buffer, {
+  return new NextResponse(new Uint8Array(buffer as ArrayBuffer), {
     headers: {
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'Content-Disposition': `attachment; filename="${filename}"`,
